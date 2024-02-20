@@ -47,10 +47,13 @@ class _CalculadoraState extends State<Calculadora> {
             : resultado =
                 null; //Nada mais é do que um if usando um operador ternário
       } else if (operacao == "Pot") {
-        resultado =
-            numero1 != 0 ? pow(numero1, numero2) as double : resultado = 1;
+        resultado = numero1 != 0
+            ? pow(numero1, numero2) as double
+            : resultado = 1; //as double, pois ele especifica a forma de retorno
       } else {
-        resultado = numero2%2==1&&numero1<0 ? numero1!=0 ? pow(numero1, (1 / numero2)) as double : resultado = null;      
+        resultado = numero2 % 2 == 1 && numero1 >= 0
+            ? -pow(-numero1, (1 / numero2)) as double
+            : resultado = null;
       }
       _resultado =
           resultado != null ? 'O Resultado é $resultado' : "Operação inválida";
@@ -102,12 +105,12 @@ class _CalculadoraState extends State<Calculadora> {
               child: Text('Divisao'),
             ),
             SizedBox(height: 16.0),
-             ElevatedButton(
+            ElevatedButton(
               onPressed: () => _calcular('Pot'),
               child: Text('Potência'),
             ),
             SizedBox(height: 16.0),
-             ElevatedButton(
+            ElevatedButton(
               onPressed: () => _calcular('Raiz'),
               child: Text('Raiz'),
             ),
