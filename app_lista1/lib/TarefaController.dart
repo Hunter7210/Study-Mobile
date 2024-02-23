@@ -11,15 +11,19 @@ class ListaTarefaControler extends ChangeNotifier {
 //Metodos CRUD
 //Metodo para adicionar uma nova tarefa à lista
   void adicionarTarefas(String descricao) {
-    _tarefas.add(Tarefa(descricao, false));
-    //Notifica os ouvidos (widgets) sobre a mudança do estado
-    notifyListeners();
+    if (descricao.trim().isNotEmpty) {
+      descricao.replaceAll(RegExp(r'\s+'), ' '); //Remove espaços duplos
+      _tarefas.add(Tarefa(descricao, false));
+      //Notifica os ouvidos (widgets) sobre a mudança do estado
+      notifyListeners();
+    }
   }
 
 //Meotodo para marcar como concluida
   void marcarComoConcluida(int indice) {
     if (indice >= 0 && indice < _tarefas.length) {
-      _tarefas[indice].concluida = true;
+      //Assim ao clicar na checkbox  ele alterna a posição atual
+      _tarefas[indice].concluida = !_tarefas[indice].concluida;
       notifyListeners();
     }
   }
