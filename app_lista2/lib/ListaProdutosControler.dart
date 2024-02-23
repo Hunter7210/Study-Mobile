@@ -1,7 +1,7 @@
 import 'package:app_lista2/Produtos.dart';
 import 'package:flutter/material.dart';
 
-class ListaProdutosConstroler extends ChangeNotifier {
+class ListaProdutosControler extends ChangeNotifier {
   //Atributos da classe
   //Cria uma baseada no Produto
   List<Produtos> _produtos = [];
