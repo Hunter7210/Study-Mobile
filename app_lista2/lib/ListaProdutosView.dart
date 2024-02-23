@@ -28,6 +28,28 @@ class ListaProdutosView extends StatelessWidget {
                 // Ícone para adicionar um produto ao pressionar o botão
                 suffixIcon: IconButton(
                   onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text("Você adicionou um produto"),
+                          content: Text("O produto " +
+                              _controller.text +
+                              "foi adicionado a sua lista de compras"),
+                          actions: <Widget>[
+                            //Este é o botão que aparecera no meu alert, Exemplo: Fechar, Atualizar etc
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context)
+                                    .pop(); // Fecha o AlertDialog quando o botão é pressionado
+                              },
+                              child: Text(
+                                  'Fechar'), // Define o texto do botão como "Fechar"
+                            ),
+                          ],
+                        );
+                      },
+                    );
                     // Chamando o método adicionarProduto do Provider para atualizar o estado
                     Provider.of<ListaProdutosControler>(context, listen: false)
                         .adicionarProdutos(_controller.text);
