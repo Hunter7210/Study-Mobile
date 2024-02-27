@@ -28,33 +28,7 @@ class ListaProdutosView extends StatelessWidget {
                 // Ícone para adicionar um produto ao pressionar o botão
                 suffixIcon: IconButton(
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text("Você adicionou um produto"),
-                          content: Text("O produto " +
-                              _controller.text +
-                              "foi adicionado a sua lista de compras"),
-                          actions: <Widget>[
-                            //Este é o botão que aparecera no meu alert, Exemplo: Fechar, Atualizar etc
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context)
-                                    .pop(); // Fecha o AlertDialog quando o botão é pressionado
-                              },
-                              child: Text(
-                                  'Fechar'), // Define o texto do botão como "Fechar"
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                    // Chamando o método adicionarProduto do Provider para atualizar o estado
-                    Provider.of<ListaProdutosControler>(context, listen: false)
-                        .adicionarProdutos(_controller.text);
-                    // Limpar o campo de texto após adicionar a tarefa
-                    _controller.clear();
+                    _showConfirmationDialog(context);
                   },
                   icon: Icon(Icons.add),
                 ),
@@ -93,5 +67,68 @@ class ListaProdutosView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void _showConfirmationDialog(BuildContext context) async {
+    bool confirmado = await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Confirmação"),
+          content: Text("Deseja realmente adicionar produto?"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text('Não'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text('Sim'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmado == true) {
+      _listarProduto(context);
+      _alertConfirma(context);
+    }
+  }
+
+  void _alertConfirma(BuildContext context) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Você adicionou um produto"),
+          content: Text('O produto ' +
+              _controller.text +
+              'foi adicionado a sua lista de compras'),
+          actions: <Widget>[
+            //Este é o botão que aparecera no meu alert, Exemplo: Fechar, Atualizar etc
+            TextButton(
+              onPressed: () {
+                Navigator.of(context)
+                    .pop(); // Fecha o AlertDialog quando o botão é pressionado
+              },
+              child: Text('Fechar'), // Define o texto do botão como "Fechar"
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _listarProduto(BuildContext context) async {
+    // Chamando o método adicionarProduto do Provider para atualizar o estado
+    return Provider.of<ListaProdutosControler>(context, listen: false)
+        .adicionarProdutos(_controller.text);
+    // Limpar o campo de texto após adicionar a tarefa
+    _controller.clear();
   }
 }
