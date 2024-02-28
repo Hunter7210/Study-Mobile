@@ -43,4 +43,8 @@ class ListaProdutosControler extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void atualizaProduto(String descricao, int indice, String texto) {
+    _produtos[indice].descricao = texto;
+  }
 }

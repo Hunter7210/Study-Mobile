@@ -43,19 +43,28 @@ class ListaProdutosView extends StatelessWidget {
                   itemCount: model.produtos.length,
                   itemBuilder: (context, index) {
                     return ListTile(
-                      // Exibição do texto do produto
                       title: Text(model.produtos[index].descricao),
-                      // Checkbox para marcar o produto como comprado
-                      trailing: Checkbox(
-                        value: model.produtos[index].concluida,
-                        onChanged: (value) {
-                          // Chamando o método marcarComoConcluida do Provider para atualizar o estado
-                          model.marcarComoComprado(index);
-                        },
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Ícone de atualizar
+                          IconButton(
+                            icon: Icon(Icons.update),
+                            onPressed: () {
+                              _alertAtuali(context, model, index);
+                            },
+                          ),
+                          // Checkbox para marcar o produto como comprado
+                          Checkbox(
+                            value: model.produtos[index].concluida,
+                            onChanged: (value) {
+                              model.marcarComoComprado(index);
+                            },
+                          ),
+                        ],
                       ),
                       // Exclui a tarefa ao manter pressionado
                       onLongPress: () {
-                        // Chamando o método excluirProduto do Provider para atualizar o estado
                         model.excluirProduto(index);
                       },
                     );
@@ -96,6 +105,8 @@ class ListaProdutosView extends StatelessWidget {
 
     if (confirmado == true) {
       _listarProduto(context);
+      // Limpar o campo de texto após adicionar a tarefa
+      _controller.clear();
       _alertConfirma(context);
     }
   }
@@ -108,7 +119,7 @@ class ListaProdutosView extends StatelessWidget {
           title: Text("Você adicionou um produto"),
           content: Text('O produto ' +
               _controller.text +
-              'foi adicionado a sua lista de compras'),
+              ' foi adicionado a sua lista de compras'),
           actions: <Widget>[
             //Este é o botão que aparecera no meu alert, Exemplo: Fechar, Atualizar etc
             TextButton(
@@ -124,11 +135,48 @@ class ListaProdutosView extends StatelessWidget {
     );
   }
 
+  void _alertAtuali(
+      BuildContext context, ListaProdutosControler model, int index) async {
+    TextEditingController _updateController = TextEditingController();
+    _updateController.text = model.produtos[index].descricao;
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Atualizar Produto"),
+          content: TextField(
+            controller: _updateController,
+            decoration: InputDecoration(hintText: "Escreva aqui:"),
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                model.atualizaProduto(model.produtos[index].descricao, index,
+                    _updateController.text);
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text('Atualizar'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (context.mounted) {
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text('Fechar'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _listarProduto(BuildContext context) async {
     // Chamando o método adicionarProduto do Provider para atualizar o estado
     return Provider.of<ListaProdutosControler>(context, listen: false)
         .adicionarProdutos(_controller.text);
-    // Limpar o campo de texto após adicionar a tarefa
-    _controller.clear();
   }
 }
