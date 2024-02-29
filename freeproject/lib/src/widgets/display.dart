@@ -17,4 +17,7 @@ class Display extends StatefulWidget {
       ),
     );
   }
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
