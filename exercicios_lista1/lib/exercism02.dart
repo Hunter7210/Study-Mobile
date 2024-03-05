@@ -30,7 +30,7 @@ class Exercism02 extends StatelessWidget {
                     width: 200.0,
                     color: Colors.indigoAccent,
                   ),
-                  Text("Baixo")
+                  Text("Baixo"),
                 ],
               ),
               Text("Direita"),
