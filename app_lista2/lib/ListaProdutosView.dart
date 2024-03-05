@@ -13,7 +13,10 @@ class ListaProdutosView extends StatelessWidget {
     return Scaffold(
       // Barra superior do aplicativo
       appBar: AppBar(
-        title: Text('Lista de Produtos'),
+        title: Text(
+          'Lista de Produtos',
+          style: TextStyle(color: Colors.lime),
+        ),
       ),
       // Corpo principal do aplicativo
       body: Column(
