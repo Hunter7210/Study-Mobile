@@ -5,6 +5,9 @@ import 'package:exercicios_lista1/exercism04.dart';
 import 'package:exercicios_lista1/exercism05.dart';
 import 'package:exercicios_lista1/exercism06.dart';
 import 'package:exercicios_lista1/exercism07.dart';
+import 'package:exercicios_lista1/exercism08.dart';
+import 'package:exercicios_lista1/exercism09.dart';
+import 'package:exercicios_lista1/exercism10.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -20,7 +23,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      home: Exercism07(),
+      home: Center(
+        child: Exercism10(),
+      ),
     );
   }
 }
