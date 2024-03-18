@@ -19,7 +19,7 @@ class _MyAnimatedContainerState extends State<Exercism10> {
         setState(() {
           // Atualiza o estado do widget
           // Ao clicar, altera as dimensões do container
-          _width = _width * 1.0; // Alterna entre 100 e 200
+          _width = _width + 2.0; // Alterna entre 100 e 200
           _height = _height + 10.0; // Alterna entre 100 e 200
 
           _color = Color.fromRGBO(255, 0, 0, 1);
