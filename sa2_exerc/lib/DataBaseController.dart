@@ -6,9 +6,9 @@ import 'package:sqflite/sqflite.dart';
 class DatabaseHelper {
   //Ajuda a realizar as concexões com banco e criação de tabelas
   static const String DATABASE_NAME = 'users.db';
-  static const String TABLE_NAME = 'users';
+  static const String TABLE_NAME = 'usuarios';
   static const String CREATE_CONTACTS_TABLE_SCRIPT =
-      'CREATE TABLE users(id SERIAL PRIMARY KEY, nome TEXT, email TEXT, telefone TEXT, celular TEXT, endereco TEXT)';
+      'CREATE TABLE usuarios( id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, telefone TEXT, sexo TEXT, cep TEXT, senha TEXT)';
 
   //Future -significa que ela vai ser uma ação executa ao longo da aplicação
   Future<Database> _getDatabase() async {
@@ -40,7 +40,7 @@ class DatabaseHelper {
     try {
       final Database db = await _getDatabase();
       final List<Map<String, dynamic>> maps =
-          await db.query(TABLE_NAME); // Consulta todos os contatos na tabela
+          await db.query(TABLE_NAME); // Consulta todos os usuarios na tabela
 
       return List.generate(
         maps.length,
@@ -63,7 +63,7 @@ class DatabaseHelper {
         TABLE_NAME,
         model.toMap(),
         where: "id = ?", // Condição para atualizar o contato com base no ID
-        whereArgs: [model.id],
+        /*   whereArgs: [model.id], */
       );
     } catch (ex) {
       print(ex);

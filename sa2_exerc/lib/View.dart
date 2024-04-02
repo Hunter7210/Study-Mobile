@@ -1,16 +1,26 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:sa2_exerc/DataBaseController.dart';
+import 'package:sa2_exerc/Model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
-/*   _LoginPageState createState() => _LoginPageState(); */
-  /* _CadastroPageState createState() => _CadastroPageState(); */
-  _PreferencUserPage createState() => _PreferencUserPage();
+/*  _LoginPageState createState() => _LoginPageState(); */
+  _CadastroPageState createState() => _CadastroPageState();
+  /*  _PreferencUserPage createState() => _PreferencUserPage();  */
 }
 /* 
 class _LoginPageState extends State<HomePage> {
+  final dbHelper = DatabaseHelper();
+  final _formKey = GlobalKey<FormState>();
+
+  // Controllers para os campos de texto
+  TextEditingController _userController = TextEditingController();
+  TextEditingController _senhaController = TextEditingController();
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,6 +44,7 @@ class _LoginPageState extends State<HomePage> {
             padding: const EdgeInsets.all(5.0),
             child: Column(children: [
               TextField(
+                controller: _userController,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
@@ -47,6 +58,7 @@ class _LoginPageState extends State<HomePage> {
               ),
               SizedBox(height: 16.0),
               TextField(
+                controller: _senhaController,
                 obscureText: true,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
@@ -80,10 +92,20 @@ class _LoginPageState extends State<HomePage> {
       ),
     );
   }
-}
+} */
 
 class _CadastroPageState extends State<HomePage> {
+  TextEditingController _nomeController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _telefoneController = TextEditingController();
+  TextEditingController _sexoController = TextEditingController();
+  TextEditingController _cepController = TextEditingController();
+  TextEditingController _senhaController = TextEditingController();
+
   String dropdownValue = 'Masculino';
+
+  final dbHelper = DatabaseHelper();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -93,27 +115,26 @@ class _CadastroPageState extends State<HomePage> {
       appBar: AppBar(
         title: Text('Formulário'),
       ),
-      body: Container(
-        width: tamanhoTela.width, // Usa a largura total da tela
-        height: tamanhoTela.height, // Usa a altura total da tela
-        child: // Seus widgets vão aqui
-            Form(
-          child: Padding(
-            padding: EdgeInsets.all(20.0),
+      body: Form(
+        child: Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Expanded(
             child: Column(
               children: <Widget>[
                 TextFormField(
+                    controller: _nomeController,
                     decoration: InputDecoration(
-                  labelText: 'Nome',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide(
-                      color: Colors.blueGrey.shade200,
-                    ),
-                  ),
-                )),
+                      labelText: 'Nome',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                        borderSide: BorderSide(
+                          color: Colors.blueGrey.shade200,
+                        ),
+                      ),
+                    )),
                 SizedBox(height: 10.0),
                 TextFormField(
+                  controller: _emailController,
                   decoration: InputDecoration(
                     labelText: 'Email',
                     border: OutlineInputBorder(
@@ -127,6 +148,7 @@ class _CadastroPageState extends State<HomePage> {
                 ),
                 SizedBox(height: 10.0),
                 TextFormField(
+                  controller: _telefoneController,
                   decoration: InputDecoration(
                     labelText: 'Telefone',
                     border: OutlineInputBorder(
@@ -139,9 +161,25 @@ class _CadastroPageState extends State<HomePage> {
                   // Adicione outras propriedades necessárias aqui
                 ),
                 SizedBox(height: 10.0),
+                DropdownButtonFormField<String>(
+                  value: dropdownValue,
+                  items: <String>['Masculino', 'Feminino']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      dropdownValue = newValue!;
+                    });
+                  },
+                ),
                 TextFormField(
+                  controller: _cepController,
                   decoration: InputDecoration(
-                    labelText: 'Celular',
+                    labelText: 'Cep',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide(
@@ -151,45 +189,22 @@ class _CadastroPageState extends State<HomePage> {
                   ),
                   // Adicione outras propriedades necessárias aqui
                 ),
-                /*  Row(children: [
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'CEP'),
-                    // Adicione outras propriedades necessárias aqui
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'Numero'),
-                    // Adicione outras propriedades necessárias aqui
-                  ),
-                ]),
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Celular'),
-                  // Adicione outras propriedades necessárias aqui
-                ), */
-                // Adicione outros TextFormField aqui
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    DropdownButtonFormField<String>(
-                      value: dropdownValue,
-                      items: <String>['Masculino', 'Feminino']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownValue = newValue!;
-                        });
-                      },
+                  controller: _senhaController,
+                  decoration: InputDecoration(
+                    labelText: 'Senha',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(
+                        color: Colors.blueGrey.shade200,
+                      ),
                     ),
-                  ],
+                  ),
+                  // Adicione outras propriedades necessárias aqui
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    // Adicione a lógica de envio do formulário aqui
+                    _addUser();
                   },
                   child: Text("Enviar"),
                 ),
@@ -200,9 +215,38 @@ class _CadastroPageState extends State<HomePage> {
       ),
     );
   }
-}
- */
 
+  void _addUser() {
+    final newUser = UsersModel(
+      nome: _nomeController.text,
+      email: _emailController.text,
+      telefone: _telefoneController.text,
+      sexo: dropdownValue,
+      cep: _cepController.text,
+      senha: _senhaController.text,
+    );
+    print("Adicionado com sucesso");
+    dbHelper.create(newUser);
+    setState(() {
+      // Atualiza a lista de contatos
+    });
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
 class _PreferencUserPage extends State<HomePage> {
   bool isDarkTheme = false;
   bool _switchValue2 = false;
@@ -269,52 +313,5 @@ class _PreferencUserPage extends State<HomePage> {
       ),
     );
   }
-} 
-/* COD ANTIGO 
-class _PreferencUserPage extends State<HomePage> {
-  bool isDarkTheme = false;
-  bool _switchValue2 = false;
-
-  var tema = Icons.dark_mode;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Switch com Ícones'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SwitchListTile(
-              title: Text("Tema"),
-              value: isDarkTheme,
-              onChanged: (bool value) {
-                setState(() {
-                  tema != Icons.dark_mode
-                      ? tema = Icons.dark_mode
-                      : tema = Icons.light_mode_outlined;
-                  ThemeMode.dark;
-                  isDarkTheme = value;
-                });
-              },
-              secondary: Icon(tema),
-            ),
-            SwitchListTile(
-              title: const Text('Switch 2'),
-              value: _switchValue2,
-              onChanged: (bool value) {
-                setState(() {
-                  _switchValue2 = value;
-                });
-              },
-              secondary: const Icon(Icons.ac_unit),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 }
-*/
+ */
