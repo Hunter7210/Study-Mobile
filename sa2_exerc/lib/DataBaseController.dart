@@ -5,7 +5,7 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
   //Ajuda a realizar as concexões com banco e criação de tabelas
-  static const String DATABASE_NAME = 'users.db';
+  static const String DATABASE_NAME = 'usuarios.db';
   static const String TABLE_NAME = 'usuarios';
   static const String CREATE_CONTACTS_TABLE_SCRIPT =
       'CREATE TABLE usuarios( id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, telefone TEXT, sexo TEXT, cep TEXT, senha TEXT)';
@@ -83,6 +83,26 @@ class DatabaseHelper {
     } catch (ex) {
       print(ex);
       return;
+    }
+  }
+
+  Future<bool> _verifyUser(String email) async {
+    try {
+      final Database db = await _getDatabase();
+      final String sql = 'SELECT COUNT(*) as count FROM users WHERE email = ?';
+      final List<Map<String, dynamic>> result = await db.query(TABLE_NAME,
+          where: "email = ?", // Condição para excluir o contato com base no ID
+          whereArgs: [email]);
+
+      if (result.isNotEmpty) {
+        final int count = result.first['count'] as int;
+        return count > 0;
+      }
+      return false;
+    } catch (e) {
+      // Trata a exceção e retorna falso ou relança a exceção, dependendo da necessidade.
+      print('Ocorreu um erro ao verificar o e-mail: $e');
+      return false; // Ou relance a exceção com 'throw e;'
     }
   }
 }

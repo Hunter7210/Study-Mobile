@@ -231,6 +231,10 @@ class _CadastroPageState extends State<HomePage> {
       // Atualiza a lista de contatos
     });
   }
+
+/*   void _verifyUser(){
+    final 
+  } */
 }
 
 
