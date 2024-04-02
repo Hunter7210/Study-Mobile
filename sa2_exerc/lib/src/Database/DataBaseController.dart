@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
-import 'package:sa2_exerc/Model.dart';
+import 'package:sa2_exerc/src/models/Model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
@@ -86,23 +86,14 @@ class DatabaseHelper {
     }
   }
 
-  Future<bool> _verifyUser(String email) async {
-    try {
-      final Database db = await _getDatabase();
-      final String sql = 'SELECT COUNT(*) as count FROM users WHERE email = ?';
-      final List<Map<String, dynamic>> result = await db.query(TABLE_NAME,
-          where: "email = ?", // Condição para excluir o contato com base no ID
-          whereArgs: [email]);
-
-      if (result.isNotEmpty) {
-        final int count = result.first['count'] as int;
-        return count > 0;
-      }
-      return false;
-    } catch (e) {
-      // Trata a exceção e retorna falso ou relança a exceção, dependendo da necessidade.
-      print('Ocorreu um erro ao verificar o e-mail: $e');
-      return false; // Ou relance a exceção com 'throw e;'
-    }
+  Future<bool> verifyUser(String email) async {
+    final db = await _getDatabase(); // Obtenha a instância do banco de dados
+    final res = await db.query(
+      TABLE_NAME, // Substitua pelo nome da sua tabela
+      where:
+          'email = ?', // Substitua 'nome' pelo campo que contém o nome do usuário
+      whereArgs: [email],
+    );
+    return res.isNotEmpty; // Retorna verdadeiro se encontrar algum registro
   }
 }

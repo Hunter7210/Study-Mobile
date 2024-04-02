@@ -5,7 +5,8 @@
 //flutter pub add path_provider
 
 import 'package:flutter/material.dart';
-import 'package:sa2_exerc/View.dart';
+import 'package:sa2_exerc/src/pages/LoginPage.dart';
+import 'package:sa2_exerc/src/pages/ConfigPage.dart';
 
 void main() {
   runApp(MyApp());
