@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sa2_exerc/src/Database/DataBaseController.dart';
 import 'package:sa2_exerc/src/models/Model.dart';
 import 'package:sa2_exerc/src/pages/CadastroPage.dart';
+import 'package:sa2_exerc/src/pages/ConfigPage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -82,7 +83,7 @@ class _LoginPageState extends State<HomePage> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      _verify();
+                      _verify(context);
                     },
                     child: Text('Login'),
                   ),
@@ -104,9 +105,17 @@ class _LoginPageState extends State<HomePage> {
     );
   }
 
-  void _verify() {
-    print("Usuario existe");
-    dbHelper.verifyUser(_emailController.text);
+  Future<void> _verify(BuildContext context) async {
+    if (await dbHelper.verifyUser(
+        _emailController.text, _senhaController.text)) {
+      print("Achou");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ConfigPage()),
+      );
+    } else {
+      print("Usuário não encontrado");
+    }
 
     setState(() {
       // Atualiza a lista de contatos
