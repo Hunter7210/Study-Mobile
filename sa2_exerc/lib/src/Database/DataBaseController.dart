@@ -88,14 +88,26 @@ class DatabaseHelper {
 
   Future<bool> verifyUser(String email, String senha) async {
     final db = await _getDatabase(); // Obtenha a instância do banco de dados
-    final resEma = await db.query(
+    final res = await db.query(
       TABLE_NAME, // Substitua pelo nome da sua tabela
-      where: 'email = ?',
-      whereArgs: [email],
+      where: 'email = ? AND senha= ?',
+      whereArgs: [email, senha],
     );
-    print(resEma);
+    print(res);
 
-    final res = resEma;
+    return res.isNotEmpty; // Retorna verdadeiro se encontrar algum registro
+  }
+
+  Future<bool> verifyUserExis(
+      String nome, String email, String telefone, String senha) async {
+    final db = await _getDatabase(); // Obtenha a instância do banco de dados
+    final res = await db.query(
+      TABLE_NAME, // Substitua pelo nome da sua tabela
+      where: 'nome= ? AND email = ? AND telefone= ? AND senha= ?',
+      whereArgs: [nome, email, telefone, senha],
+    );
+
+    print(res);
 
     return res.isNotEmpty; // Retorna verdadeiro se encontrar algum registro
   }

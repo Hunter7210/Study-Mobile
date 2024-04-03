@@ -120,7 +120,7 @@ class _CadastroPageState extends State<CadastroPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    _addUser();
+                    _verifyExis(context);
                   },
                   child: Text("Enviar"),
                 ),
@@ -143,6 +143,28 @@ class _CadastroPageState extends State<CadastroPage> {
     );
     print("Adicionado com sucesso");
     dbHelper.create(newUser);
+    setState(() {
+      // Atualiza a lista de contatos
+    });
+  }
+
+  Future<void> _verifyExis(BuildContext context) async {
+    if (await dbHelper.verifyUserExis(
+        _nomeController.text,
+        _emailController.text,
+        _telefoneController.text,
+        _senhaController.text)) {
+      print("Usuario ja existe, tente realizar o login");
+    } else {
+      print("Cadastro realizado com sucesso");
+      _addUser();
+      _nomeController.text = "";
+      _emailController.text = "";
+      _telefoneController.text = "";
+      _cepController.text = "";
+      _senhaController.text = "";
+    }
+
     setState(() {
       // Atualiza a lista de contatos
     });

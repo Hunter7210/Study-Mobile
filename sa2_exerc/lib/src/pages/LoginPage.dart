@@ -83,6 +83,7 @@ class _LoginPageState extends State<HomePage> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
+                      verifyCampVaz();
                       _verify(context);
                     },
                     child: Text('Login'),
@@ -93,6 +94,8 @@ class _LoginPageState extends State<HomePage> {
                         context,
                         MaterialPageRoute(builder: (context) => CadastroPage()),
                       );
+                      _emailController.text = "";
+                      _senhaController.text = "";
                     },
                     child: Text('Cadastre-se'),
                   )
@@ -113,12 +116,28 @@ class _LoginPageState extends State<HomePage> {
         context,
         MaterialPageRoute(builder: (context) => ConfigPage()),
       );
+      _emailController.text = "";
+      _senhaController.text = "";
     } else {
-      print("Usuário não encontrado");
+      print("Usuário não encontrado, tente se cadastrar");
     }
 
     setState(() {
       // Atualiza a lista de contatos
     });
+  }
+
+  void verifyCampVaz() {
+    var campos = [_emailController.text, _senhaController.text];
+    var camppre = [];
+    for (var i = 0; i < campos.length; i++) {
+      camppre.add(campos[i].isEmpty);
+    }
+    print(camppre);
+    if (camppre.contains(true)) {
+      print("Por favor preencha todos os campos");
+    } else {
+      print("Preenchido");
+    }
   }
 }
