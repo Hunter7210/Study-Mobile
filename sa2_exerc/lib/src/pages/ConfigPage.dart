@@ -43,6 +43,16 @@ class _PreferencUserPage extends State<ConfigPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Switch com Ícones'),
+        backgroundColor: Colors.amber,
+        actions: <Widget>[
+          IconButton(onPressed: () {}, icon: Icon(Icons.light_mode_sharp)),
+          IconButton(onPressed: () {}, icon: Icon(Icons.swap_vert_outlined)),
+          IconButton(
+            icon: Icon(Icons.public),
+            tooltip: 'Mundo',
+            onPressed: () {},
+          )
+        ],
       ),
       body: Center(
         child: Column(
@@ -53,7 +63,7 @@ class _PreferencUserPage extends State<ConfigPage> {
               value: isDarkTheme,
               onChanged: (bool value) {
                 setState(() {
-                  isDarkTheme = value;
+                  isDarkTheme = false;
                   tema =
                       isDarkTheme ? Icons.light_mode_outlined : Icons.dark_mode;
                   _salvarPreferencias(isDarkTheme, _switchValue2);

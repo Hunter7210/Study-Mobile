@@ -10,8 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class HomePage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
-  /*  _CadastroPageState createState() => _CadastroPageState(); */
-  /*  _PreferencUserPage createState() => _PreferencUserPage();  */
 }
 
 class _LoginPageState extends State<HomePage> {
@@ -39,7 +37,7 @@ class _LoginPageState extends State<HomePage> {
             borderRadius: BorderRadius.circular(16.0),
             boxShadow: [
               BoxShadow(
-                color: Color.fromARGB(255, 181, 200, 255).withOpacity(0.1),
+                /*  color: Color.fromARGB(255, 181, 200, 255).withOpacity(0.1), */
                 spreadRadius: 10.0,
                 offset: Offset(0.0, 3.0),
               ),
@@ -111,15 +109,28 @@ class _LoginPageState extends State<HomePage> {
   Future<void> _verify(BuildContext context) async {
     if (await dbHelper.verifyUser(
         _emailController.text, _senhaController.text)) {
-      print("Achou");
-      Navigator.push(
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Login realizado com sucesso!'),
+          backgroundColor: Colors.amber,
+          duration: Duration(seconds: 3),
+        ),
+      );
+
+      var push = Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ConfigPage()),
       );
       _emailController.text = "";
       _senhaController.text = "";
     } else {
-      print("Usuário não encontrado, tente se cadastrar");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Usuário não encontrado, tente se cadastrar'),
+          backgroundColor: Colors.blueGrey,
+          duration: Duration(seconds: 3),
+        ),
+      );
     }
 
     setState(() {

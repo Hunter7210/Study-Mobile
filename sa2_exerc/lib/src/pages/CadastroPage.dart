@@ -23,6 +23,7 @@ class _CadastroPageState extends State<CadastroPage> {
   final dbHelper = DatabaseHelper();
   final _formKey = GlobalKey<FormState>();
 
+  bool adcionado = false;
   @override
   Widget build(BuildContext context) {
     final tamanhoTela = MediaQuery.of(context).size;
@@ -121,6 +122,18 @@ class _CadastroPageState extends State<CadastroPage> {
                 ElevatedButton(
                   onPressed: () {
                     _verifyExis(context);
+                    if (adcionado) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Você se cadastrou com sucesso!'),
+                          duration: Duration(seconds: 3),
+                        ),
+                      );
+                      print("Adicionado");
+                      Navigator.pop(
+                        context,
+                      );
+                    }
                   },
                   child: Text("Enviar"),
                 ),
@@ -141,8 +154,15 @@ class _CadastroPageState extends State<CadastroPage> {
       cep: _cepController.text,
       senha: _senhaController.text,
     );
-    print("Adicionado com sucesso");
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Cadastro realizado com sucesso!'),
+        backgroundColor: Colors.blueGrey[600],
+        duration: Duration(seconds: 3),
+      ),
+    );
     dbHelper.create(newUser);
+    adcionado = true;
     setState(() {
       // Atualiza a lista de contatos
     });
@@ -154,9 +174,21 @@ class _CadastroPageState extends State<CadastroPage> {
         _emailController.text,
         _telefoneController.text,
         _senhaController.text)) {
-      print("Usuario ja existe, tente realizar o login");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Usuario ja existe, tente realizar o login'),
+          backgroundColor: Colors.blueGrey[600],
+          duration: Duration(seconds: 3),
+        ),
+      );
     } else {
-      print("Cadastro realizado com sucesso");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Cadastro realizado com sucesso"),
+          backgroundColor: Colors.blueGrey[600],
+          duration: Duration(seconds: 3),
+        ),
+      );
       _addUser();
       _nomeController.text = "";
       _emailController.text = "";
