@@ -1,11 +1,9 @@
-import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
-import 'package:sa2_exerc/src/Database/DataBaseController.dart';
-import 'package:sa2_exerc/src/models/Model.dart';
+import 'package:sa2_exerc/src/database/DataBaseController.dart';
 import 'package:sa2_exerc/src/pages/CadastroPage.dart';
 import 'package:sa2_exerc/src/pages/ConfigPage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -21,9 +19,11 @@ class _LoginPageState extends State<HomePage> {
   TextEditingController _cepController = TextEditingController();
   TextEditingController _senhaController = TextEditingController();
 
-  final dbHelper = DatabaseHelper();
-  final _formKey = GlobalKey<FormState>();
+  final dbHelper =
+      DatabaseHelper(); /* 
+  final _formKey = GlobalKey<FormState>(); */
 
+  int contador = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,13 +35,6 @@ class _LoginPageState extends State<HomePage> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.0),
-            boxShadow: [
-              BoxShadow(
-                /*  color: Color.fromARGB(255, 181, 200, 255).withOpacity(0.1), */
-                spreadRadius: 10.0,
-                offset: Offset(0.0, 3.0),
-              ),
-            ],
           ),
           child: Padding(
             padding: const EdgeInsets.all(5.0),
@@ -108,7 +101,8 @@ class _LoginPageState extends State<HomePage> {
 
   Future<void> _verify(BuildContext context) async {
     if (await dbHelper.verifyUser(
-        _emailController.text, _senhaController.text)) {
+            _emailController.text, _senhaController.text) &&
+        verifyCampVaz() == true) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Login realizado com sucesso!'),
@@ -117,20 +111,44 @@ class _LoginPageState extends State<HomePage> {
         ),
       );
 
-      var push = Navigator.push(
+      //Redirecionando para a pagina de configurações
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => ConfigPage()),
       );
+      //Limpando os campos
       _emailController.text = "";
       _senhaController.text = "";
-    } else {
+    } else if (await dbHelper.verifyUser(
+                _emailController.text, _senhaController.text) ==
+            true &&
+        verifyCampVaz() == true) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Usuário não encontrado, tente se cadastrar'),
+          content: Text('Por favor preencha todos os campos'),
           backgroundColor: Colors.blueGrey,
           duration: Duration(seconds: 3),
         ),
       );
+    } else {
+      if (contador >= 5) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Muitas tentativas verificas, tente se cadastrar!'),
+            backgroundColor: Colors.blueGrey,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Usuario não encontrado, tente novamente'),
+            backgroundColor: Colors.blueGrey,
+            duration: Duration(seconds: 3),
+          ),
+        );
+        contador++;
+      }
     }
 
     setState(() {
@@ -138,17 +156,20 @@ class _LoginPageState extends State<HomePage> {
     });
   }
 
-  void verifyCampVaz() {
+  bool campVazio = false;
+  bool verifyCampVaz() {
     var campos = [_emailController.text, _senhaController.text];
-    var camppre = [];
+    var campPre = [];
     for (var i = 0; i < campos.length; i++) {
-      camppre.add(campos[i].isEmpty);
+      campPre.add(campos[i].isEmpty);
     }
-    print(camppre);
-    if (camppre.contains(true)) {
+    print(campPre);
+    if (campPre.contains(true)) {
+      campVazio = true;
       print("Por favor preencha todos os campos");
     } else {
       print("Preenchido");
     }
+    return campVazio;
   }
 }

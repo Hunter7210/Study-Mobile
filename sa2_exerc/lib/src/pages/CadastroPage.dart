@@ -1,9 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:sa2_exerc/src/Database/DataBaseController.dart';
+import 'package:sa2_exerc/src/database/DataBaseController.dart';
 import 'package:sa2_exerc/src/models/Model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class CadastroPage extends StatefulWidget {
   @override
@@ -11,30 +8,28 @@ class CadastroPage extends StatefulWidget {
 }
 
 class _CadastroPageState extends State<CadastroPage> {
-  TextEditingController _nomeController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _telefoneController = TextEditingController();
-  TextEditingController _sexoController = TextEditingController();
-  TextEditingController _cepController = TextEditingController();
-  TextEditingController _senhaController = TextEditingController();
+  final TextEditingController _nomeController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _telefoneController = TextEditingController();
+  final TextEditingController _sexoController = TextEditingController();
+  final TextEditingController _cepController = TextEditingController();
+  final TextEditingController _senhaController = TextEditingController();
 
   String dropdownValue = 'Masculino';
 
   final dbHelper = DatabaseHelper();
-  final _formKey = GlobalKey<FormState>();
-
+/*   final _formKey = GlobalKey<FormState>();
+ */
   bool adcionado = false;
   @override
   Widget build(BuildContext context) {
-    final tamanhoTela = MediaQuery.of(context).size;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Formulário'),
+        title: const Text('Formulário'),
       ),
       body: Form(
         child: Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(20.0),
           child: Expanded(
             child: Column(
               children: <Widget>[
@@ -49,7 +44,7 @@ class _CadastroPageState extends State<CadastroPage> {
                         ),
                       ),
                     )),
-                SizedBox(height: 10.0),
+                const SizedBox(height: 10.0),
                 TextFormField(
                   controller: _emailController,
                   decoration: InputDecoration(
@@ -63,7 +58,7 @@ class _CadastroPageState extends State<CadastroPage> {
                   ),
                   // Adicione outras propriedades necessárias aqui
                 ),
-                SizedBox(height: 10.0),
+                const SizedBox(height: 10.0),
                 TextFormField(
                   controller: _telefoneController,
                   decoration: InputDecoration(
@@ -77,7 +72,7 @@ class _CadastroPageState extends State<CadastroPage> {
                   ),
                   // Adicione outras propriedades necessárias aqui
                 ),
-                SizedBox(height: 10.0),
+                const SizedBox(height: 10.0),
                 DropdownButtonFormField<String>(
                   value: dropdownValue,
                   items: <String>['Masculino', 'Feminino']
@@ -124,7 +119,7 @@ class _CadastroPageState extends State<CadastroPage> {
                     _verifyExis(context);
                     if (adcionado) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('Você se cadastrou com sucesso!'),
                           duration: Duration(seconds: 3),
                         ),
@@ -135,7 +130,7 @@ class _CadastroPageState extends State<CadastroPage> {
                       );
                     }
                   },
-                  child: Text("Enviar"),
+                  child: const Text("Enviar"),
                 ),
               ],
             ),
@@ -156,9 +151,9 @@ class _CadastroPageState extends State<CadastroPage> {
     );
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Cadastro realizado com sucesso!'),
+        content: const Text('Cadastro realizado com sucesso!'),
         backgroundColor: Colors.blueGrey[600],
-        duration: Duration(seconds: 3),
+        duration: const Duration(seconds: 2),
       ),
     );
     dbHelper.create(newUser);
@@ -176,29 +171,50 @@ class _CadastroPageState extends State<CadastroPage> {
         _senhaController.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Usuario ja existe, tente realizar o login'),
+          content: const Text('Usuario ja existe, tente realizar o login'),
           backgroundColor: Colors.blueGrey[600],
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         ),
       );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Cadastro realizado com sucesso"),
-          backgroundColor: Colors.blueGrey[600],
-          duration: Duration(seconds: 3),
-        ),
-      );
-      _addUser();
-      _nomeController.text = "";
-      _emailController.text = "";
-      _telefoneController.text = "";
-      _cepController.text = "";
-      _senhaController.text = "";
+      if (!checkEmpty()) {
+        _addUser();
+        _nomeController.text = "";
+        _emailController.text = "";
+        _telefoneController.text = "";
+        _cepController.text = "";
+        _senhaController.text = "";
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Por favor preencha todos os campos'),
+            backgroundColor: Colors.blueGrey[600],
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
     }
 
     setState(() {
       // Atualiza a lista de contatos
     });
+  }
+
+  bool camposVazios = false;
+
+  bool checkEmpty() {
+    var campos = [
+      _nomeController.text,
+      _emailController.text,
+      _telefoneController.text,
+      _senhaController.text
+    ];
+    for (var i = 0; i < campos.length; i++) {
+      if (campos[i].isEmpty) {
+        camposVazios = true;
+        print(campos[i]);
+      }
+    }
+    return camposVazios;
   }
 }

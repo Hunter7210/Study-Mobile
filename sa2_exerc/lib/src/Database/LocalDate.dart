@@ -8,6 +8,4 @@ class LocalDate {
 
     shared.setString(chave, valor);
   }
-
-  //Funções de get
 }
