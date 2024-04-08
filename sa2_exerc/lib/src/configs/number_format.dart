@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class AppSettingsLang with ChangeNotifier {
+class AppSettingsLang extends ChangeNotifier {
   String _locale = 'pt_BR';
   String _currencySymbol = 'R\$';
 

@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:sa2_exerc/src/database/DataBaseController.dart';
 import 'package:sa2_exerc/src/pages/CadastroPage.dart';
@@ -101,8 +99,9 @@ class _LoginPageState extends State<HomePage> {
 
   Future<void> _verify(BuildContext context) async {
     if (await dbHelper.verifyUser(
-            _emailController.text, _senhaController.text) &&
-        verifyCampVaz() == true) {
+                _emailController.text, _senhaController.text) ==
+            true &&
+        verifyCampVaz() == false) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Login realizado com sucesso!'),

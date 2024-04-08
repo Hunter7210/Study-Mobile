@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:exemplo_persistencia_sqllite/DataBaseController.dart';
 import 'package:exemplo_persistencia_sqllite/Model.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +53,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _alertAtuali(
+          _addContact(
             context,
           );
         },
@@ -64,7 +62,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _alertAtuali(
+  void _addContact(
     BuildContext context,
   ) async {
     TextEditingController _idcontroller = TextEditingController();

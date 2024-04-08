@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sa2_exerc/src/models/Model.dart';
 import 'package:sqflite/sqflite.dart';

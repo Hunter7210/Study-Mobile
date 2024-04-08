@@ -95,7 +95,7 @@ class DatabaseHelper {
       await db.insert(
         TABLE_NAME,
         model.toMap(),
-      );
+      ); 
     } catch (ex) {
       print(ex);
       return;

@@ -6,7 +6,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sa2_exerc/src/Database/LocalDate.dart';
 import 'package:sa2_exerc/src/configs/app_settings.dart';
+import 'package:sa2_exerc/src/configs/number_format.dart';
 import 'package:sa2_exerc/src/pages/LoginPage.dart';
 
 void main() {
@@ -25,6 +27,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
+        ChangeNotifierProvider(create: (context) => AppSettingsLang()),
         ChangeNotifierProvider(create: (context) => AppSettings()),
       ],
       child: MaterialApp(

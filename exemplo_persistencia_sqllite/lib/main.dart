@@ -12,9 +12,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Projeto SQLLite",
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
-    );
+        title: "Projeto SQLLite",
+        theme: ThemeData(primarySwatch: Colors.blue),
+        home: HomePage());
   }
 }

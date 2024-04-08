@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:core';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sa2_exerc/src/configs/app_settings.dart';
@@ -28,36 +29,11 @@ class _PreferencUserPage extends State<ConfigPage> {
   @override
   Widget build(BuildContext context) {
     readNumerFormat() {
-      loc = context.watch<AppSettingsLang>().locale as Map<String, String>;
-      real = NumberFormat.currency(locale: loc['locale'], symbol: loc['name']);
+      String loc = context.watch<AppSettingsLang>().locale;
+      print(loc); // Saída: R$ 1.234,56
+
+      // real = NumberFormat.currency(locale: loc['locale'], symbol: loc['name']);
     }
-
-    changeLanguageButton() {
-      final locale = loc['locale'] == 'pt_BR' ? 'en_Us' : 'pt_BR';
-      final name = loc['locale'] == 'pt_BR' ? '\$' : 'R\$';
-
-      return PopupMenuButton(
-        icon: const Icon(Icons.swap_vert_outlined),
-        itemBuilder: (context) => [
-          PopupMenuItem(
-            child: ListTile(
-              leading: Icon(Icons.swap_vert),
-              title: Text('Usar: $locale'),
-              onTap: () {
-                context.read<AppSettings>().setLocale(locale, name);
-                Navigator.pop(context);
-              },
-            ),
-          ),
-        ],
-      );
-    }
-
-    loc = context.watch<AppSettings>().locale;
-    double value = 1234.56;
-    String formattedValue =
-        context.watch<AppSettingsLang>().formatCurrency(value);
-    print(formattedValue); // Saída: R$ 1.234,56
 
     readNumerFormat();
     return Scaffold(
@@ -104,6 +80,27 @@ class _PreferencUserPage extends State<ConfigPage> {
           ],
         ),
       ),
+    );
+  }
+
+  changeLanguageButton() {
+    final locale = loc['locale'] == 'pt_BR' ? 'en_Us' : 'pt_BR';
+    final name = loc['locale'] == 'pt_BR' ? '\$' : 'R\$';
+
+    return PopupMenuButton(
+      icon: Icon(Icons.swap_vert_outlined),
+      itemBuilder: (context) => [
+        PopupMenuItem(
+          child: ListTile(
+            leading: Icon(Icons.swap_vert),
+            title: Text('Usar: $locale'),
+            onTap: () {
+              context.read<AppSettings>().setLocale(locale, name);
+              Navigator.pop(context);
+            },
+          ),
+        ),
+      ],
     );
   }
 }
