@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:math';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 import 'package:sa2_exerc/src/models/Model.dart';
 import 'package:sqflite/sqflite.dart';
@@ -8,6 +12,8 @@ class DatabaseHelper {
   static const String TABLE_NAME = 'usuarios';
   static const String CREATE_CONTACTS_TABLE_SCRIPT =
       'CREATE TABLE usuarios( id INTEGER PRIMARY KEY AUTOINCREMENT, nome TEXT, email TEXT, telefone TEXT, sexo TEXT, cep TEXT, senha TEXT)';
+
+  late int userId;
 
   //Future -significa que ela vai ser uma ação executa ao longo da aplicação
   Future<Database> _getDatabase() async {
@@ -22,6 +28,32 @@ class DatabaseHelper {
     );
   }
 
+  // Obter as preferências de um usuário
+  Future<String> getPreferences() async {
+    final db = await _getDatabase(); // Obtenha a instância do banco de dados
+    final res =
+        await db.query(TABLE_NAME, where: 'id = ?', whereArgs: [userId]);
+    return res.map((row) => row.toString()).first;
+  }
+
+  // Salvar as preferências de um usuário
+  Future<void> savePreferences(
+      int userId, Map<String, String> preferences) async {
+    final db = await _getDatabase(); // Obtenha a instância do banco de dados
+    final res = await db.insert(TABLE_NAME, {'userId': userId, ...preferences});
+  }
+
+  //Metodo para buscar o Id do usuario
+  Future<Object?> userByID(String email) async {
+    final db = await _getDatabase(); // Obtenha a instância do banco de dados
+    final res = await db.query(
+      TABLE_NAME,
+      where: 'email= ?',
+      whereArgs: [email],
+    );
+    return res.first['id'];
+  }
+
   // Método para criar um novo contato no banco de dados
   Future<void> create(UsersModel model) async {
     try {
@@ -34,7 +66,7 @@ class DatabaseHelper {
     }
   }
 
-  // Método para obter todos os contatos do banco de dados
+  // Método para obter todos os usuarios do banco de dados
   Future<List<UsersModel>> getContacts() async {
     try {
       final Database db = await _getDatabase();

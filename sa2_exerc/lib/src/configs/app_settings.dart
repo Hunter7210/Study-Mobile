@@ -1,47 +1,41 @@
-import 'package:flutter/material.dart';
+// Classe para abstrair o acesso ao banco de dados
+import 'package:sa2_exerc/src/database/DataBaseController.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
 
-class AppSettings extends ChangeNotifier {
-  late SharedPreferences _prefs;
-  Map<String, String> locale = {
-    'locale': 'pt/BR',
-    'name': 'R\$',
-  };
+// Classe para gerenciar as preferências do usuário
+class UserPreferences {
+  // Tabela para armazenar as preferências
+  final String tablePreferences = 'preferences';
 
-//Contrutor
-  AppSettings() {
-    //Necessária criação deste metodo, pois o construtor não pode ser assincrono
-    _startSettings();
+  final DatabaseHelper database;
+  final int userId;
+  UserPreferences(this.database, this.userId);
+
+  Future<void> loadTasks() async {
+    SharedPreferences prefs = await SharedPreferences
+        .getInstance(); // Obtém as preferências compartilhadas
+    setState(() {
+      tasks = prefs.getStringList('tasks') ??
+          []; // Carrega as tarefas armazenadas ou uma lista vazia se não houver tarefas
+    });
   }
 
-  _startSettings() async {
-    await _startPreferences();
-    await _readLocale();
+  // Salvar as preferências de um usuário
+  Future<void> savePreferences(
+      int userId, Map<String, String> preferences) async {
+    final db = await _getDatabase(); // Obtenha a instância do banco de dados
+    final res = await db.insert(TABLE_NAME, {'userId': userId, ...preferences});
   }
 
-  //Metodo para inicializar as minha preferencuias
-  Future<void> _startPreferences() async {
-    _prefs = await SharedPreferences.getInstance();
+  // Obter o tema da aplicação
+  Future<String> getTheme() async {
+    final preferences = await database.getPreferences(userId);
+    return preferences['theme'] ?? 'light';
   }
 
-//Metodo para ler as preferencias e notificar os listeners
-  _readLocale() {
-    final local = _prefs.getString('local') ??
-        'pt_BR'; //Significa que se o valor for nulo ele é considerado como 'pt_BR'; "?? Significa ou"
-    final name = _prefs.getString('name') ?? 'R\$';
-
-//Chamando chave valor
-    locale = {
-      'locale': local,
-      'name': name,
-    };
-    notifyListeners();
-  }
-
-//Metodo publico para que o usuario possa alter esses campos em qualquer logar do app
-  setLocale(String local, String name) async {
-    await _prefs.setString('local', local);
-    await _prefs.setString('name', name);
-    await _readLocale();
+  // Salvar o tema da aplicação
+  Future<void> setTheme(String theme) async {
+    await database.savePreferences(userId, {'theme': theme});
   }
 }

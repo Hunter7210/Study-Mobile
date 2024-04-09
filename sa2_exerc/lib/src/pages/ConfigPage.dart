@@ -4,7 +4,6 @@ import 'dart:core';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:sa2_exerc/src/configs/app_settings.dart';
-import 'package:sa2_exerc/src/configs/number_format.dart';
 
 class ConfigPage extends StatefulWidget {
   @override
@@ -12,36 +11,25 @@ class ConfigPage extends StatefulWidget {
 }
 
 class _PreferencUserPage extends State<ConfigPage> {
+  IconData iconeClaro = Icons.light_mode;
+  IconData iconeEscuro = Icons.dark_mode;
+
   bool isDarkTheme = false;
-  bool _switchValue2 = false;
 
   var iconsEsco = Icons.dark_mode;
   bool iconVerifyDark = false;
 
-  late NumberFormat real;
-  late Map<String, String> loc;
+  bool _temaEscuro = false; // Altere o nome da variável para melhor clareza
 
-/*   @override
-  void initState() {
-    super.initState();
-  } */
+  late Locale locale;
 
   @override
   Widget build(BuildContext context) {
-    readNumerFormat() {
-      String loc = context.watch<AppSettingsLang>().locale;
-      print(loc); // Saída: R$ 1.234,56
-
-      // real = NumberFormat.currency(locale: loc['locale'], symbol: loc['name']);
-    }
-
-    readNumerFormat();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Switch com Ícones'),
         backgroundColor: Colors.amber,
         actions: <Widget>[
-          changeLanguageButton(),
           IconButton(
             onPressed: () {
               iconsEsco =
@@ -50,13 +38,24 @@ class _PreferencUserPage extends State<ConfigPage> {
             icon: Icon(iconsEsco),
           ),
           PopupMenuButton(
-            icon: const Icon(Icons.public),
-            tooltip: 'Mundo',
+            icon: const Icon(Icons.settings),
             itemBuilder: (context) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 child: ListTile(
-/*                   leading: Icon(Icons.swap_vert), */
-                  title: Text("Usar: R\$ "),
+                  leading: const Icon(Icons.notifications),
+                  title: const Text('Notificações'),
+                  onTap: () {
+                    // Navegue para a página de configurações de notificação
+                  },
+                ),
+              ),
+              PopupMenuItem(
+                child: ListTile(
+                  leading: const Icon(Icons.color_lens),
+                  title: const Text('Personalização'),
+                  onTap: () {
+                    // Navegue para a página de personalização da interface
+                  },
                 ),
               ),
             ],
@@ -68,39 +67,18 @@ class _PreferencUserPage extends State<ConfigPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             SwitchListTile(
-              title: const Text('Switch 2'),
-              value: _switchValue2,
+              title: const Text('Tema Escuro'),
+              value: _temaEscuro,
               onChanged: (bool value) {
                 setState(() {
-                  _switchValue2 = value;
+                  _temaEscuro = value;
                 });
               },
-              secondary: const Icon(Icons.ac_unit),
+              secondary: Icon(_temaEscuro ? iconeEscuro : iconeClaro),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  changeLanguageButton() {
-    final locale = loc['locale'] == 'pt_BR' ? 'en_Us' : 'pt_BR';
-    final name = loc['locale'] == 'pt_BR' ? '\$' : 'R\$';
-
-    return PopupMenuButton(
-      icon: Icon(Icons.swap_vert_outlined),
-      itemBuilder: (context) => [
-        PopupMenuItem(
-          child: ListTile(
-            leading: Icon(Icons.swap_vert),
-            title: Text('Usar: $locale'),
-            onTap: () {
-              context.read<AppSettings>().setLocale(locale, name);
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      ],
     );
   }
 }
