@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:sa2_exerc/src/database/DataBaseController.dart';
 import 'package:sa2_exerc/src/pages/CadastroPage.dart';
@@ -10,23 +12,18 @@ class HomePage extends StatefulWidget {
 
 class _LoginPageState extends State<HomePage> {
   // Controllers para os campos de texto
-  TextEditingController _nomeController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
-  TextEditingController _telefoneController = TextEditingController();
-  TextEditingController _sexoController = TextEditingController();
-  TextEditingController _cepController = TextEditingController();
   TextEditingController _senhaController = TextEditingController();
 
-  final dbHelper =
-      DatabaseHelper(); /* 
-  final _formKey = GlobalKey<FormState>(); */
+  final dbHelper = DatabaseHelper(); // Instância do DBHelper
 
-  int contador = 0;
+  int contador = 0; // Contador de tentativas de login
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        title: const Text('Login'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(22.0),
@@ -37,6 +34,7 @@ class _LoginPageState extends State<HomePage> {
           child: Padding(
             padding: const EdgeInsets.all(5.0),
             child: Column(children: [
+              // Campo de entrada para o email
               TextField(
                 controller: _emailController,
                 decoration: InputDecoration(
@@ -47,13 +45,14 @@ class _LoginPageState extends State<HomePage> {
                     ),
                   ),
                   hintText: 'Usuário',
-                  hintStyle: TextStyle(color: Colors.grey),
+                  hintStyle: const TextStyle(color: Colors.grey),
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
+              // Campo de entrada para a senha
               TextField(
                 controller: _senhaController,
-                obscureText: true,
+                obscureText: true, // Oculta o texto digitado
                 decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(8.0),
@@ -62,31 +61,36 @@ class _LoginPageState extends State<HomePage> {
                     ),
                   ),
                   hintText: 'Senha',
-                  hintStyle: TextStyle(color: Colors.grey),
+                  hintStyle: const TextStyle(color: Colors.grey),
                 ),
               ),
-              SizedBox(height: 16.0),
+              const SizedBox(height: 16.0),
+              // Botões para login e cadastro
               Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   ElevatedButton(
                     onPressed: () {
+                      // Função para verificar se os campos estão vazios e realizar o login
                       verifyCampVaz();
+
                       _verify(context);
                     },
-                    child: Text('Login'),
+                    child: const Text('Login'),
                   ),
                   ElevatedButton(
                     onPressed: () {
+                      // Navega para a página de cadastro
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => CadastroPage()),
                       );
-                      _emailController.text = "";
-                      _senhaController.text = "";
+                      // Limpa os campos de email e senha
+                      _emailController.clear();
+                      _senhaController.clear();
                     },
-                    child: Text('Cadastre-se'),
+                    child: const Text('Cadastre-se'),
                   )
                 ],
               )
@@ -97,57 +101,66 @@ class _LoginPageState extends State<HomePage> {
     );
   }
 
+  // Função para realizar a verificação e login
   Future<void> _verify(BuildContext context) async {
-    if (await dbHelper.verifyUser(
-                _emailController.text, _senhaController.text) ==
-            true &&
-        verifyCampVaz() == false) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Login realizado com sucesso!'),
-          backgroundColor: Colors.amber,
-          duration: Duration(seconds: 3),
-        ),
-      );
+    bool isEmpty = verifyCampVaz(); // Verifica se há campos vazios
 
-      //Redirecionando para a pagina de configurações
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => ConfigPage()),
-      );
-      //Limpando os campos
-      _emailController.text = "";
-      _senhaController.text = "";
-    } else if (await dbHelper.verifyUser(
-                _emailController.text, _senhaController.text) ==
-            true &&
-        verifyCampVaz() == true) {
+    // Se houver campos vazios, exibe um snackbar e retorna
+    if (isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Por favor preencha todos os campos'),
           backgroundColor: Colors.blueGrey,
           duration: Duration(seconds: 3),
         ),
       );
+
+      return;
+    }
+
+    // Se excedeu o número máximo de tentativas, exibe um snackbar e retorna
+    if (contador >= 5) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Muitas tentativas verificadas, tente se cadastrar!'),
+          backgroundColor: Colors.blueGrey,
+          duration: Duration(seconds: 3),
+        ),
+      );
+      return;
+    }
+
+    // Verifica se o usuário existe no banco de dados
+    bool userExists =
+        await dbHelper.verifyUser(_emailController.text, _senhaController.text);
+
+    if (userExists) {
+      // Se o usuário existe, exibe um snackbar de sucesso, navega para a página de configurações e limpa os campos
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login realizado com sucesso!'),
+          backgroundColor: Colors.blueGrey,
+          duration: Duration(seconds: 3),
+        ),
+      );
+      verifyCampVaz();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ConfigPage()),
+      );
+
+      _emailController.clear();
+      _senhaController.clear();
     } else {
-      if (contador >= 5) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Muitas tentativas verificas, tente se cadastrar!'),
-            backgroundColor: Colors.blueGrey,
-            duration: Duration(seconds: 3),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Usuario não encontrado, tente novamente'),
-            backgroundColor: Colors.blueGrey,
-            duration: Duration(seconds: 3),
-          ),
-        );
-        contador++;
-      }
+      // Se o usuário não existe, exibe um snackbar de erro e incrementa o contador de tentativas
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Usuário não encontrado, tente novamente'),
+          backgroundColor: Colors.blueGrey,
+          duration: Duration(seconds: 3),
+        ),
+      );
+      contador++;
     }
 
     setState(() {
@@ -155,20 +168,15 @@ class _LoginPageState extends State<HomePage> {
     });
   }
 
-  bool campVazio = false;
+  // Função para verificar se há campos vazios
   bool verifyCampVaz() {
-    var campos = [_emailController.text, _senhaController.text];
-    var campPre = [];
-    for (var i = 0; i < campos.length; i++) {
-      campPre.add(campos[i].isEmpty);
-    }
-    print(campPre);
-    if (campPre.contains(true)) {
-      campVazio = true;
+    bool isAnyEmpty =
+        _emailController.text.isEmpty || _senhaController.text.isEmpty;
+    if (isAnyEmpty) {
       print("Por favor preencha todos os campos");
     } else {
       print("Preenchido");
     }
-    return campVazio;
+    return isAnyEmpty;
   }
 }

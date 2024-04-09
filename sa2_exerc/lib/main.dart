@@ -6,7 +6,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sa2_exerc/src/configs/app_settings.dart';
 import 'package:sa2_exerc/src/configs/number_format.dart';
 import 'package:sa2_exerc/src/pages/LoginPage.dart';
 
@@ -24,17 +23,11 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => AppSettingsLang()),
-        ChangeNotifierProvider(create: (context) => AppSettings()),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: "Projeto SQLLite",
-        theme: ThemeData.light(),
-        home: HomePage(),
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: "Projeto SQLLite",
+      theme: ThemeData.light(),
+      home: HomePage(),
     );
   }
 }

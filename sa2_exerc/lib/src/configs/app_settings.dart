@@ -1,41 +1,64 @@
-// Classe para abstrair o acesso ao banco de dados
-import 'package:sa2_exerc/src/database/DataBaseController.dart';
+// preferences.dart
+
+// Importe as bibliotecas necessárias
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sqflite/sqflite.dart';
 
-// Classe para gerenciar as preferências do usuário
+// Crie uma classe para gerenciar as preferências do usuário
 class UserPreferences {
-  // Tabela para armazenar as preferências
-  final String tablePreferences = 'preferences';
-
-  final DatabaseHelper database;
-  final int userId;
-  UserPreferences(this.database, this.userId);
-
-  Future<void> loadTasks() async {
-    SharedPreferences prefs = await SharedPreferences
-        .getInstance(); // Obtém as preferências compartilhadas
-    setState(() {
-      tasks = prefs.getStringList('tasks') ??
-          []; // Carrega as tarefas armazenadas ou uma lista vazia se não houver tarefas
-    });
+  // Método para obter o tamanho da fonte salvo nas preferências
+  static Future<double> getFontSize() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getDouble('fontSize') ??
+        16.0; // Retorna 16.0 se não houver valor salvo
   }
 
-  // Salvar as preferências de um usuário
-  Future<void> savePreferences(
-      int userId, Map<String, String> preferences) async {
-    final db = await _getDatabase(); // Obtenha a instância do banco de dados
-    final res = await db.insert(TABLE_NAME, {'userId': userId, ...preferences});
+  // Método para obter a cor do AppBar salva nas preferências
+  static Future<Color> getAppBarColor() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int colorValue = prefs.getInt('appBarColor') ??
+        Colors.blue.value; // Retorna azul se não houver valor salvo
+    return Color(colorValue);
   }
 
-  // Obter o tema da aplicação
-  Future<String> getTheme() async {
-    final preferences = await database.getPreferences(userId);
-    return preferences['theme'] ?? 'light';
+  // Método para obter o ícone salvo nas preferências
+  static Future<IconData> getIconNotify() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String iconName = prefs.getString('iconNotify') ??
+        "notifications"; // Nome padrão do ícone
+    return iconNameToIconData(iconName);
   }
 
-  // Salvar o tema da aplicação
-  Future<void> setTheme(String theme) async {
-    await database.savePreferences(userId, {'theme': theme});
+  // Método auxiliar para converter o nome do ícone em IconData
+  static IconData iconNameToIconData(String iconName) {
+    switch (iconName) {
+      case 'add':
+        return Icons.add;
+      case 'remove':
+        return Icons.remove;
+      case 'notifications':
+        return Icons.notifications;
+      // Adicione mais casos conforme necessário
+      default:
+        return Icons.notifications; // Ícone padrão
+    }
+  }
+
+  // Método para salvar o tamanho da fonte nas preferências
+  static Future<void> setFontSize(double fontSize) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('fontSize', fontSize);
+  }
+
+  // Método para salvar a cor do AppBar nas preferências
+  static Future<void> setAppBarColor(Color appBarColor) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('appBarColor', appBarColor.value);
+  }
+
+  // Método para salvar o ícone nas preferências
+  static Future<void> setIconNotify(String iconName) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('iconNotify', iconName);
   }
 }

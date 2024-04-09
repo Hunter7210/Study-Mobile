@@ -11,15 +11,14 @@ class _CadastroPageState extends State<CadastroPage> {
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _telefoneController = TextEditingController();
-  final TextEditingController _sexoController = TextEditingController();
   final TextEditingController _cepController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
   String dropdownValue = 'Masculino';
 
   final dbHelper = DatabaseHelper();
-/*   final _formKey = GlobalKey<FormState>();
- */
+/*   final _formKey = GlobalKey<FormState>(); */
+
   bool adcionado = false;
   @override
   Widget build(BuildContext context) {
