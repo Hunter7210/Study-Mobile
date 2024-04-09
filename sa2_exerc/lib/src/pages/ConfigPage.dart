@@ -89,7 +89,15 @@ class _PreferencUserPage extends State<ConfigPage> {
                           const SnackBar(
                             content: Text('Notificações silenciadas!'),
                             backgroundColor: Colors.blueGrey,
-                            duration: Duration(seconds: 3),
+                            duration: Duration(seconds: 1),
+                          ),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Notificações ativadas!'),
+                            backgroundColor: Colors.blueGrey,
+                            duration: Duration(seconds: 1),
                           ),
                         );
                       }
