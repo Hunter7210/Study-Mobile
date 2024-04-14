@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:core';
 
 import 'package:sa2_exerc/src/Database/DataBaseController.dart';
+import 'package:sa2_exerc/src/configs/app_settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfigPage extends StatefulWidget {
@@ -43,13 +44,21 @@ class _PreferencUserPage extends State<ConfigPage> {
     setState(() {
       _darkMode = _prefs.getBool('darkMode') ??
           false; // Obtém o estado atual do tema escuro ou define como falso se não houver valor
-      // Atualiza a UI após carregar as preferências
+
       _iconVerifyNotify = _prefs.getBool('iconVerifyNotify') ??
           false; // Obtém o tamanho da fonte salvo
 /*     _appBarColor = await UserPreferences.getAppBarColor();
      =
         await UserPreferences.getIconNotify(); // Obtém a cor do AppBar salvas */
     });
+  } // Atualiza a UI após carregar as preferências
+
+  Future<void> saveUserPreferences(UserPreferences preferences) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt('userId', preferences.userId);
+    await prefs.setString('themeMode', preferences.themeMode);
+    await prefs.setBool(
+        'notificationsEnabled', preferences.notificationsEnabled);
   }
 
   Future<void> _toggleDarkMode() async {
@@ -88,7 +97,7 @@ class _PreferencUserPage extends State<ConfigPage> {
           const Duration(milliseconds: 100), // Define a duração da transição
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Switch com Ícones'),
+          title: const Text('Settings'),
           backgroundColor:
               const Color.fromARGB(255, 4, 64, 112), // Define a cor do AppBar
           actions: <Widget>[
@@ -97,6 +106,37 @@ class _PreferencUserPage extends State<ConfigPage> {
                 _toggleDarkMode(); // Chama a função para alternar o tema escuro
               },
               icon: Icon(_darkMode ? iconeEscuro : iconeClaro),
+            ),
+            PopupMenuButton(
+              icon: const Icon(Icons.language),
+              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                PopupMenuItem(
+                  child: ListTile(
+                    leading: const Icon(Icons.lte_mobiledata),
+                    title: const Text('PT/BR'),
+                    onTap: () {
+                      const PopupMenuItem(
+                        child: ListTile(
+                          title: Text('Notificações'),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+                PopupMenuItem(
+                  child: ListTile(
+                    leading: const Icon(Icons.abc),
+                    title: const Text('EN'),
+                    onTap: () {
+                      const PopupMenuItem(
+                        child: ListTile(
+                          title: Text('Notificações'),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ),
             PopupMenuButton(
               icon: const Icon(Icons.settings),
@@ -128,42 +168,6 @@ class _PreferencUserPage extends State<ConfigPage> {
                     leading: Icon(_iconVerifyNotify
                         ? Icons.notifications
                         : Icons.notifications_off),
-                  ),
-                ),
-                PopupMenuItem(
-                  child: ListTile(
-                    title: const Text("Language"),
-                    leading: PopupMenuButton(
-                      icon: const Icon(Icons.language),
-                      itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-                        PopupMenuItem(
-                          child: ListTile(
-                            leading: const Icon(Icons.lte_mobiledata),
-                            title: const Text('PT/BR'),
-                            onTap: () {
-                              const PopupMenuItem(
-                                child: ListTile(
-                                  title: Text('Notificações'),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        PopupMenuItem(
-                          child: ListTile(
-                            leading: const Icon(Icons.abc),
-                            title: const Text('ENGLISH'),
-                            onTap: () {
-                              const PopupMenuItem(
-                                child: ListTile(
-                                  title: Text('Notificações'),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
                 ),
               ],

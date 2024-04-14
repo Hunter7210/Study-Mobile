@@ -2,10 +2,22 @@
 
 // Importe as bibliotecas necessárias
 import 'package:flutter/material.dart';
+import 'package:sa2_exerc/src/Database/DataBaseController.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Crie uma classe para gerenciar as preferências do usuário
 class UserPreferences {
+  final int userId;
+  final String themeMode;
+  final bool notificationsEnabled;
+
+  UserPreferences({
+    required this.userId,
+    required this.themeMode,
+    required this.notificationsEnabled,
+  });
+
+  DatabaseHelper dbh = DatabaseHelper();
   // Método para obter o tamanho da fonte salvo nas preferências
   static Future<double> getFontSize() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -40,6 +52,45 @@ class UserPreferences {
         return Icons.notifications;
       default:
         return Icons.notifications; // Ícone padrão
+    }
+  }
+
+  Future<UserPreferences> getUserPreferences() async {
+    // Obtenha o ID do usuário do SQLFlite
+    final int? userId = await dbh.getUserIdFromDatabase();
+
+    // Se o ID do usuário for encontrado, carregue as preferências
+    if (userId != null) {
+      return _getUserPreferencesFromSharedPreferences(userId);
+    } else {
+      // Se o ID do usuário não for encontrado, retorne um novo objeto
+      return UserPreferences(
+        userId: 0, // ID padrão para novo usuário
+        themeMode: 'light', // Valor padrão para novo usuário
+        notificationsEnabled: false, // Valor padrão para novo usuário
+      );
+    }
+  }
+
+  Future<UserPreferences> _getUserPreferencesFromSharedPreferences(
+      int userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final int? savedUserId = prefs.getInt('userId');
+    final String? themeMode = prefs.getString('themeMode');
+    final bool? notificationsEnabled = prefs.getBool('notificationsEnabled');
+
+    if (savedUserId != null && savedUserId == userId) {
+      return UserPreferences(
+        userId: savedUserId,
+        themeMode: themeMode ?? 'light',
+        notificationsEnabled: notificationsEnabled ?? false,
+      );
+    } else {
+      return UserPreferences(
+        userId: userId,
+        themeMode: 'light', // Valor padrão para novo usuário
+        notificationsEnabled: false, // Valor padrão para novo usuário
+      );
     }
   }
 

@@ -5,8 +5,6 @@
 //flutter pub add path_provider
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sa2_exerc/src/configs/number_format.dart';
 import 'package:sa2_exerc/src/pages/LoginPage.dart';
 
 void main() {

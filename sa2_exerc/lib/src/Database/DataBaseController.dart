@@ -38,6 +38,7 @@ class DatabaseHelper {
       int userId, Map<String, String> preferences) async {
     final db = await _getDatabase(); // Obtenha a instância do banco de dados
     final res = await db.insert(TABLE_NAME, {'userId': userId, ...preferences});
+    print(res);
   }
 
   //Metodo para buscar o Id do usuario
@@ -88,5 +89,21 @@ class DatabaseHelper {
     print(res);
 
     return res.isNotEmpty; // Retorna verdadeiro se encontrar algum registro
+  }
+
+  Future<int?> getUserIdFromDatabase() async {
+    final db = await _getDatabase(); // Obtenha a instância do banco de dados
+
+    // Execute a consulta para obter o ID do usuário
+    final query = 'SELECT id FROM usuarios';
+    final result = await db.query('usuarios');
+
+    // Verifique se há resultados
+    if (result.isNotEmpty) {
+      final userId = result.first['id'] as int;
+      return userId;
+    } else {
+      return null;
+    }
   }
 }
