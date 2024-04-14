@@ -6,14 +6,16 @@ import 'package:sa2_exerc/src/pages/CadastroPage.dart';
 import 'package:sa2_exerc/src/pages/ConfigPage.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<HomePage> {
   // Controllers para os campos de texto
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _senhaController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _senhaController = TextEditingController();
 
   final dbHelper = DatabaseHelper(); // Instância do DBHelper
 

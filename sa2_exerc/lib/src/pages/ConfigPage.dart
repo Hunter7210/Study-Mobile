@@ -1,32 +1,31 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'dart:core';
 
 import 'package:sa2_exerc/src/Database/DataBaseController.dart';
-import 'package:sa2_exerc/src/configs/app_settings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfigPage extends StatefulWidget {
+  const ConfigPage({super.key});
+
   @override
   _PreferencUserPage createState() => _PreferencUserPage();
 }
 
 class _PreferencUserPage extends State<ConfigPage> {
-  double _fontSize = 16.0; // Tamanho da fonte padrão
-  Color _appBarColor = Colors.blue; // Cor padrão do AppBa
+  late SharedPreferences
+      _prefs; // Preferências compartilhadas para armazenar o estado do tema escuro
 
+/*   double _fontSize = 16.0; // Tamanho da fonte padrão
+  Color _appBarColor = Colors.blue; // Cor padrão do AppBa
+ */
   IconData iconeClaro = Icons.light_mode;
   IconData iconeEscuro = Icons.dark_mode;
 
-  var iconsEsco = Icons.dark_mode;
   bool iconVerifyDark = false;
 
-  IconData _iconsNoti = Icons.notifications_off_sharp;
-  bool iconVerifyNotify = false;
+  bool _iconVerifyNotify = false;
 
-  bool _temaEscuro = false; // Altere o nome da variável para melhor clareza
-
-  late Locale locale;
+  bool _darkMode = false; // Estado atual do tema escuro
 
   DatabaseHelper dbh = DatabaseHelper();
 
@@ -39,52 +38,75 @@ class _PreferencUserPage extends State<ConfigPage> {
 
   // Método para carregar as preferências do usuário
   _loadPreferences() async {
-    _fontSize =
-        await UserPreferences.getFontSize(); // Obtém o tamanho da fonte salvo
-    _appBarColor = await UserPreferences.getAppBarColor();
-    _iconsNoti =
-        await UserPreferences.getIconNotify(); // Obtém a cor do AppBar salva
-    setState(() {}); // Atualiza a UI após carregar as preferências
+    _prefs = await SharedPreferences
+        .getInstance(); // Obtém as preferências compartilhadas
+    setState(() {
+      _darkMode = _prefs.getBool('darkMode') ??
+          false; // Obtém o estado atual do tema escuro ou define como falso se não houver valor
+      // Atualiza a UI após carregar as preferências
+      _iconVerifyNotify = _prefs.getBool('iconVerifyNotify') ??
+          false; // Obtém o tamanho da fonte salvo
+/*     _appBarColor = await UserPreferences.getAppBarColor();
+     =
+        await UserPreferences.getIconNotify(); // Obtém a cor do AppBar salvas */
+    });
   }
 
-  // Método para salvar as preferências do usuário
+  Future<void> _toggleDarkMode() async {
+    setState(() {
+      _darkMode = !_darkMode; // Inverte o estado do tema escuro
+    });
+    await _prefs.setBool('darkMode',
+        _darkMode); // Salva o estado do tema escuro nas preferências compartilhadas
+  }
+
+  Future<void> _toggleIconNotify() async {
+    setState(() {
+      _iconVerifyNotify =
+          !_iconVerifyNotify; // Inverte o estado do tema escuro_iconVerifyNotify);
+    });
+    print(_iconVerifyNotify);
+    await _prefs.setBool('iconVerifyNotify',
+        _iconVerifyNotify); // Salva o estado do tema escuro nas preferências compartilhadas
+  }
+
+/*   // Método para salvar as preferências do usuário
   _savePreferences() async {
     await UserPreferences.setFontSize(_fontSize); // Salva o tamanho da fonte
     await UserPreferences.setAppBarColor(_appBarColor); // Salva a cor do AppBar
     // Salva o nome do ícone, não o ícone em si
-    await UserPreferences.setIconNotify(
-        _iconsNoti.codePoint.toString()); // Salva a cor do AppBar
-  }
+    await UserPreferences.setIconNotify(_iconsNoti.codePoint.toString());
+  } */
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Switch com Ícones'),
-        backgroundColor: _appBarColor, // Define a cor do AppBar
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              iconsEsco =
-                  !iconVerifyDark == true ? Icons.dark_mode : Icons.light_mode;
-              _savePreferences();
-            },
-            icon: Icon(iconsEsco),
-          ),
-          PopupMenuButton(
-            icon: const Icon(Icons.settings),
-            itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-              PopupMenuItem(
-                child: ListTile(
-                  leading: Icon(_iconsNoti),
-                  title: const Text('Notificações'),
-                  onTap: () {
-                    setState(() {
-                      _iconsNoti = _iconsNoti == Icons.notifications
-                          ? Icons.notifications_off
-                          : Icons.notifications;
-                      _savePreferences();
-                      if (_iconsNoti != Icons.notifications) {
+    return AnimatedTheme(
+      data: _darkMode
+          ? ThemeData.dark()
+          : ThemeData.light(), // Define o tema com base no modo escuro
+      duration:
+          const Duration(milliseconds: 100), // Define a duração da transição
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Switch com Ícones'),
+          backgroundColor:
+              const Color.fromARGB(255, 4, 64, 112), // Define a cor do AppBar
+          actions: <Widget>[
+            IconButton(
+              onPressed: () {
+                _toggleDarkMode(); // Chama a função para alternar o tema escuro
+              },
+              icon: Icon(_darkMode ? iconeEscuro : iconeClaro),
+            ),
+            PopupMenuButton(
+              icon: const Icon(Icons.settings),
+              itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                PopupMenuItem(
+                  child: ListTile(
+                    title: const Text('Notificações'),
+                    onTap: () {
+                      _toggleIconNotify();
+                      if (!_iconVerifyNotify) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text('Notificações silenciadas!'),
@@ -101,44 +123,43 @@ class _PreferencUserPage extends State<ConfigPage> {
                           ),
                         );
                       }
-                    });
-                    // Salva a preferência imediatamente
-                    Navigator.of(context).pop();
-
-                    // Fecha o PopupMenu
-                  },
+                      Navigator.of(context).pop(); // Fecha o PopupMenu
+                    },
+                    leading: Icon(_iconVerifyNotify
+                        ? Icons.notifications
+                        : Icons.notifications_off),
+                  ),
                 ),
-              ),
-              PopupMenuItem(
-                child: ListTile(
-                  leading: const Icon(Icons.language),
-                  title: const Text('Language'),
-                  onTap: () {
-                    _savePreferences();
-                    // Navegue para a página de personalização da interface
-                  },
+                PopupMenuItem(
+                  child: ListTile(
+                    leading: const Icon(Icons.language),
+                    title: const Text('Language'),
+                    onTap: () {
+                      _loadPreferences();
+                    },
+                  ),
                 ),
+              ],
+            ),
+          ],
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SwitchListTile(
+                title: const Text('Tema Escuro'),
+                value:
+                    _darkMode, // Valor do interruptor baseado no estado atual do tema escuro
+                onChanged: (value) {
+                  _toggleDarkMode(); // Chama a função para alternar o tema escuro
+                  /* _savePreferences(); */
+                  _loadPreferences();
+                },
+                secondary: Icon(_darkMode ? iconeEscuro : iconeClaro),
               ),
             ],
           ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SwitchListTile(
-              title: const Text('Tema Escuro'),
-              value: _temaEscuro,
-              onChanged: (bool value) {
-                setState(() {
-                  _temaEscuro = value;
-                });
-                _savePreferences();
-              },
-              secondary: Icon(_temaEscuro ? iconeEscuro : iconeClaro),
-            ),
-          ],
         ),
       ),
     );

@@ -17,9 +17,9 @@ class _CadastroPageState extends State<CadastroPage> {
   String dropdownValue = 'Masculino';
 
   final dbHelper = DatabaseHelper();
-/*   final _formKey = GlobalKey<FormState>(); */
 
   bool adcionado = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

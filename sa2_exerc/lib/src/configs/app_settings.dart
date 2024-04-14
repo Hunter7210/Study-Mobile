@@ -38,7 +38,6 @@ class UserPreferences {
         return Icons.remove;
       case 'notifications':
         return Icons.notifications;
-      // Adicione mais casos conforme necessário
       default:
         return Icons.notifications; // Ícone padrão
     }

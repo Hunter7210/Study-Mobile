@@ -26,8 +26,13 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: "Projeto SQLLite",
-      theme: ThemeData.light(),
-      home: HomePage(),
+      theme: ThemeData(
+        brightness: Brightness.light, // Define o tema claro como padrão
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark, // Define o tema escuro
+      ),
+      home: const HomePage(),
     );
   }
 }
