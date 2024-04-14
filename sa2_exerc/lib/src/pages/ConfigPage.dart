@@ -132,11 +132,38 @@ class _PreferencUserPage extends State<ConfigPage> {
                 ),
                 PopupMenuItem(
                   child: ListTile(
-                    leading: const Icon(Icons.language),
-                    title: const Text('Language'),
-                    onTap: () {
-                      _loadPreferences();
-                    },
+                    title: const Text("Language"),
+                    leading: PopupMenuButton(
+                      icon: const Icon(Icons.language),
+                      itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                        PopupMenuItem(
+                          child: ListTile(
+                            leading: const Icon(Icons.lte_mobiledata),
+                            title: const Text('PT/BR'),
+                            onTap: () {
+                              const PopupMenuItem(
+                                child: ListTile(
+                                  title: Text('Notificações'),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        PopupMenuItem(
+                          child: ListTile(
+                            leading: const Icon(Icons.abc),
+                            title: const Text('ENGLISH'),
+                            onTap: () {
+                              const PopupMenuItem(
+                                child: ListTile(
+                                  title: Text('Notificações'),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
