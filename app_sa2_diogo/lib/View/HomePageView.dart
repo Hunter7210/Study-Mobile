@@ -44,10 +44,10 @@ class _PaginaHomeState extends State<PaginaHome> {
         _darkMode); // Salva o estado do tema escuro nas preferências compartilhadas
   }
 
-  Future<void> _toggleLanguage() async {
+  Future<void> _toggleLanguage(String value) async {
     //Assincrono me permite se retornar um erro ele não vai parar o meu programa
     setState(() {
-      /*  _idioma = ""; // Inverte o estado do tema escuro */ //Pode adicionar uma API para mudança de idioma
+      _idioma = value; //Pode adicionar uma API para mudança de idioma
     });
     await _prefs.setString('${email}_idioma',
         _idioma); // Salva o estado do tema escuro nas preferências compartilhadas
@@ -80,7 +80,7 @@ class _PaginaHomeState extends State<PaginaHome> {
               DropdownButton<String>(
                 value: _idioma,
                 onChanged: (value) {
-                  _toggleLanguage();
+                  _toggleLanguage(value.toString());
                 },
                 items: const <DropdownMenuItem<String>>[
                   DropdownMenuItem(
