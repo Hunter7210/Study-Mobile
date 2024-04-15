@@ -1,0 +1,14 @@
+
+Modelo de Negócio
+
+View-
+    Tela de login
+    Tela de Cadastro
+    Tela de Home(interna) Acesso somente Logado
+
+Model -
+    Usuario (ID, Nome, Email, Senha)
+
+Controller-
+    Banco de Dados(usuario)
+    Interna(Shared_Preferences_do_Usuario)
