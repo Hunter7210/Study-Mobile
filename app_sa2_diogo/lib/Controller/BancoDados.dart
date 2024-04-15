@@ -79,19 +79,4 @@ class BancoDadosCrud {
       return false;
     }
   }
-
-  // Método para excluir um contato do banco de dados
-  Future<void> inserir(ContactModel model) async {
-    try {
-      final Database db = await _getDatabase();
-
-      await db.insert(
-        TABLE_NAME,
-        model.toMap(),
-      );
-    } catch (ex) {
-      print(ex);
-      return;
-    }
-  }
 }

@@ -1,5 +1,6 @@
 import 'package:app_sa2_diogo/Controller/BancoDados.dart';
 import 'package:app_sa2_diogo/Model/Usuario.dart';
+import 'package:app_sa2_diogo/View/CadastroPageView.dart';
 import 'package:app_sa2_diogo/View/HomePageView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +17,7 @@ class _PaginaLoginState extends State<PaginaLogin> {
 
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
-  final bool _loading = false;
+  bool _loading = false;
 
   @override
   Widget build(BuildContext context) {
