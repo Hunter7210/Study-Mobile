@@ -1,0 +1,15 @@
+Modelo:
+
+
+PAGES:
+    - Login
+    - Cadastro
+    - Home (deve ser acessada somente se estiver logado)
+
+Model:
+    - Usuario(ID, Nome, Email, Senha)
+    - Tarefas(ID, Nome, Concluida)
+
+Controller
+    - Banco de Dados(usuario, Tarefas)
+    - Interna(Shared_Preferences_do_Usuario)
