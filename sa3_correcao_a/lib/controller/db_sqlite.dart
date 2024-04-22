@@ -80,14 +80,14 @@ class BancoDadosCrud {
     }
   }
 
-  // Método para verificar se o email no banco de dados exite retornando uma bool, sendo possivel dar um retorno ao usuario, que ele não poderia se cadastrar ja possuindo um emdail semelhante cadastrado
+  // Método para verificar se o email no banco de dados exite retornando uma bool, sendo possivel dar um retorno ao usuario, que ele não poderia se cadastrar ja possuindo um email semelhante cadastrado
   Future<bool?> existsEmail(String email) async {
     //Com esta o retorno é true or false, porem ao trabalhar com os dados é um pouco mais complicado;
     //Metodo de verificação de login
     try {
       final Database db = await _getDatabase();
       final List<Map<String, dynamic>> maps = await db.query(TABLE_NAME,
-          where: 'email = ?  AND  senha = ?',
+          where: 'email = ?',
           whereArgs: [email]); // Consulta  os contatos na tabela
 
       if (maps.isNotEmpty) {

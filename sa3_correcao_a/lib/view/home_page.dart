@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable
 class PaginaHome extends StatefulWidget {
   String email;
   //Passando o atributo dentro do contrutor
   PaginaHome({super.key, required this.email});
 
   @override
+  // ignore: no_logic_in_create_state
   State<PaginaHome> createState() => _PaginaHomeState(email: email);
 }
 
