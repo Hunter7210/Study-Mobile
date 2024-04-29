@@ -1,4 +1,5 @@
 import 'package:exemplo_persdistencia_json_2/controller/produto_controller.dart';
+import 'package:exemplo_persdistencia_json_2/view/produto_info_view.dart';
 import 'package:flutter/material.dart';
 
 class ProdutosPage extends StatefulWidget {
@@ -29,6 +30,13 @@ class _ProdutosPageState extends State<ProdutosPage> {
                         return ListTile(
                           title: Text(controller.produtos[index].nome),
                           subtitle: Text(controller.produtos[index].categoria),
+                          trailing: Image.asset(controller.produtos[index].url),
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ProdutoInfoPage(
+                                    produto: controller.produtos[index]),
+                              )),
                         );
                       },
                     );
