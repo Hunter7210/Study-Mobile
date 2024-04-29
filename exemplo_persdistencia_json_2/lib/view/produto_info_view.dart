@@ -1,6 +1,7 @@
 import 'package:exemplo_persdistencia_json_2/model/produtos_model.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class ProdutoInfoPage extends StatelessWidget {
   Produto produto;
   ProdutoInfoPage({super.key, required this.produto});
