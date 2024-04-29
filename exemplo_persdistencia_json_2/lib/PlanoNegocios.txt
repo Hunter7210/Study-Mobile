@@ -1,0 +1,12 @@
+Modelo de Produtos
+    -nome
+    -preco
+    -categoria
+
+
+Controller de Produtos
+    -load Json (inicio) - assets/produtos.json   //Carrega o JSON logo no inicio, no caminho especificado
+
+View de Produtos 
+    -Lista de Produtos (load JSON) - assets/produtos.json
+    -Adicionar Produtos
