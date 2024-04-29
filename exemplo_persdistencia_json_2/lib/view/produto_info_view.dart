@@ -19,10 +19,7 @@ class ProdutoInfoPage extends StatelessWidget {
             // ignore: prefer_interpolation_to_compose_strings
             Text('Preco: ${produto.preco}'),
             Text(produto.categoria),
-            Image.asset(
-              produto.url,
-              fit: Border.all(color: Colors.amber, style: BorderStyle.solid),
-            )
+            Image.asset(produto.url)
           ],
         ),
       ),
