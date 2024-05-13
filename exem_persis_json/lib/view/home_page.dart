@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
     final appDocDir = await getAplicationDocumentsDirectory();
     final filePath = '${appDocDir.path}/produto.json';
     final jsonList = _produtos.map((produto) => produto.toJson());
-    await File(filePath).writeAsString(json.encode(jsonList));
+    await File(filePath).writeAsString(json.encode(jsonList));  
   }
 
   @override

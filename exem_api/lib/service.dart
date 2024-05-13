@@ -1,5 +1,6 @@
 import 'dart:convert';
 // Importa o pacote http, que fornece funções para fazer solicitações HTTP.
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class WeatherService {
@@ -22,4 +23,10 @@ class WeatherService {
       throw Exception('Failed to load weather data');
     }
   }
+  
+  Future<Map<String, dynamic> getWeatherByLocation(double latitude, double longitude) async {
+    final url= Uri.parse('$baseUrl/weather?');
+  }
+
+  
 }

@@ -13,7 +13,7 @@ class Produto {
     };
   }
 
-  factory Produto.fromJson(Map<String, dynamic> map) {
+  factory Produto.fromJson(Map<String, dynamic> map) { //Necessário para reaçizar o code e o encode
     return Produto(
         nome: map['nome'], preco: map['email'], categoria: map['categoria']);
   }
