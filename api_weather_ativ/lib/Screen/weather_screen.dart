@@ -121,7 +121,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                               height: 40,
                             ),
                             Container(
-                              color: Colors.amber,
+                              color: Colors.blueAccent,
                               width: 300,
                               height: 100,
                               child: const Column(
@@ -135,7 +135,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                     style: TextStyle(fontSize: 20),
                                   ),
                                   Text(
-                                    '  ${_weatherData['name']}',
+                                    '${_weatherData['name'],}',
                                     style: const TextStyle(fontSize: 30),
                                   ), // Exibe o nome da cidade.
                                 ],
@@ -146,7 +146,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 Container(
                                   height: 100,
                                   width: 150,
-                                  color: Colors.amberAccent,
+                                  color: Color.fromARGB(255, 0, 74, 185),
                                   child: Column(
                                     children: [
                                       const Text(
@@ -164,7 +164,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                   child: Container(
                                     height: 90,
                                     width: 90,
-                                    color: Colors.red,
+                                    color: Color.fromARGB(255, 2, 135, 175),
                                     child: Text(
                                         'Description: ${_weatherData['weather'][0]['description']}'), // Exibe a descrição do clima.
                                   ),
