@@ -1,0 +1,16 @@
+
+Modelo de Negócio para To Do
+
+View-
+    Tela de login
+    Tela de Cadastro
+    Tela de Home(interna) Acesso somente Logado
+
+Model -
+    Usuario (ID, Nome, Email, Senha)
+    Tarefas (ID, Nome, Concluida, Data_Finalizacao) 
+
+Controller-
+    Banco de Dados(usuario)
+    Banco de Dados(tarefa)
+    Interna(Shared_Preferences_do_Usuario_e_Lista)
