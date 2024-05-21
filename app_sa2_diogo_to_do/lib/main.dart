@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: "SA2_DIOGO",
+      title: "SA2_DIOGO_TODO",
       debugShowCheckedModeBanner: false,
       home: PaginaLogin(),
     );

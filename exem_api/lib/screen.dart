@@ -1,18 +1,24 @@
-import 'package:exem_api/service.dart';
+// Importa o pacote de widgets do Flutter, que contém os widgets para construir interfaces de usuário.
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:geolocator/geolocator.dart';
 
+// Importa o serviço WeatherService, que é responsável por obter os dados de previsão do tempo da API.
+import 'service.dart';
+
+// Classe StatefulWidget que representa o widget de previsão do tempo.
 class WeatherScreen extends StatefulWidget {
-  const WeatherScreen({super.key});
-
+  // Sobrescreve o método createState para criar e retornar uma instância do estado do widget.
   @override
-  State<WeatherScreen> createState() => _WeatherScreenState();
+  _WeatherScreenState createState() => _WeatherScreenState();
 }
 
+// Classe que representa o estado do widget de previsão do tempo.
 class _WeatherScreenState extends State<WeatherScreen> {
+  TextEditingController _cityController = new TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   // Instância do serviço WeatherService para obter os dados de previsão do tempo.
   final WeatherService _weatherService = WeatherService(
-    apikey:
+    apiKey:
         '681126f28e7d6fa3a7cfe0da0671e599', // Chave de API para acesso à API de previsão do tempo.
     baseUrl:
         'https://api.openweathermap.org/data/2.5', // URL base da API de previsão do tempo.
@@ -20,13 +26,18 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   // Mapa que armazenará os dados de previsão do tempo.
   late Map<String, dynamic> _weatherData;
-  final TextEditingController _citycontroller = TextEditingController();
 
   // Método chamado quando o estado é inicializado.
   @override
   void initState() {
     super.initState();
-    _weatherData = new Map<String, dynamic>();
+    _weatherData = {
+      'name': '',
+      'main': {'temp': 0},
+      'weather': [
+        {'description': ''}
+      ]
+    };
   }
 
   // Método assíncrono para buscar os dados de previsão do tempo para uma cidade específica.
@@ -44,60 +55,76 @@ class _WeatherScreenState extends State<WeatherScreen> {
     }
   }
 
+  Future<void> _fetchWeatherGeo() async {
+    try {
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      final weatherData = await _weatherService.getWeatherbyLocation(
+          position.latitude, position.longitude);
+      setState(() {
+        _weatherData = weatherData;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  // Método responsável por construir a interface de usuário do widget.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber,
-        title: const Text('Screen'),
+        title: const Text('Weather Forecast'),
+        // Título da barra de aplicativos.
       ),
-      body: FutureBuilder(
-        future: _fetchWeatherData(_citycontroller.text),
-        builder: (context, snapshot) {
-          //Retorna a interface
-          if (_weatherData.isEmpty) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else {
-            return Expanded(
-              child: Column(
-                children: [
-                  TextField(
-                    controller: _citycontroller,
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Center(
+          child: Form(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                TextFormField(
+                    controller: _cityController,
                     decoration:
-                        const InputDecoration(border: OutlineInputBorder()),
-                  ),
-                  ElevatedButton(
-                      onPressed: () {
-                        _fetchWeatherData(_citycontroller.text);
-                      },
-                      child: const Text("Button")),
-                  _weatherData == null
-                      ? const Center(
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.black,
-                            color: Colors.green,
-                          ),
-                        )
-                      : Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                  'City: ${_weatherData['name']}'), //Exibe o nome da cidade.
-                              Text(
-                                  'Temperature: ${_weatherData['main']['temp'] - 273} °C'), //  Exibe a temperatura em graus Celsius.
-                              Text(
-                                  'Description: ${_weatherData['weather'][0]['description']}'), // Exibe a descrição do clima.
-                            ],
-                          ),
-                        ),
-                ],
-              ),
-            );
-          }
-        },
+                        const InputDecoration(labelText: "Insira a Cidade"),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Insira a Cidade';
+                      }
+                      return null;
+                    }),
+                ElevatedButton(
+                    onPressed: () {
+                      _fetchWeatherData(_cityController.text);
+                    },
+                    child: const Text("Buscar")),
+                const SizedBox(
+                  height: 12,
+                ),
+                FutureBuilder(
+                    future: _fetchWeatherGeo(),
+                    builder: (context, snapshot) {
+                      if (_weatherData.isEmpty) {
+                        return const Center(
+                          child: Text(''),
+                        );
+                      } else {
+                        return Column(children: [
+                          Text(
+                              'City: ${_weatherData['name']}'), // Exibe o nome da cidade.
+                          Text(
+                              'Temperature: ${_weatherData['main']['temp'] - 273} °C'), // Exibe a temperatura em graus Celsius.
+                          Text(
+                              'Description: ${_weatherData['weather'][0]['description']}'), // Exibe a descrição do clima.
+                        ]);
+                      }
+                    }),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
