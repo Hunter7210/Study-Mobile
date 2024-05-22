@@ -1,4 +1,4 @@
-class tarefas_model {
+class Tarefas_Model {
   final int id;
   final String taks;
 
