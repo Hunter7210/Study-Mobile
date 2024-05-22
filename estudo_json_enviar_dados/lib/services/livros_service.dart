@@ -7,7 +7,7 @@ class LivrosService {
   //Realizar a solicitação http e a inserção de dados nela
   Future<Livros> createLivros(String titulo, String autor, bool alugado) async {
     final resposta = await http.post(
-      Uri.parse('assets/livros.json'),
+      Uri.parse('./assets/livros.json'),
       //Headers são basicamente os selos de uma carta, nele pode conter requisições de autenticações, alem de informar em qual formato os dados estão sendo enviados, como neste caso onde estamos passando em JSON com UTF-8
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',

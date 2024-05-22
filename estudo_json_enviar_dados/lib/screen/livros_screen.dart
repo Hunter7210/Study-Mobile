@@ -28,25 +28,35 @@ class _LivrosScreenState extends State<LivrosScreen> {
         children: <Widget>[
           TextField(
             controller: _titulo,
-            decoration: const InputDecoration(hintText: 'Enter Title'),
+            decoration: const InputDecoration(hintText: 'Titulo'),
           ),
           TextField(
             controller: _autor,
-            decoration: const InputDecoration(hintText: 'Enter Autor'),
+            decoration: const InputDecoration(hintText: 'Autor'),
           ),
-          Switch(
-            value: _alugado,
-            onChanged: (value) {
-              setState(() {
-                _alugado = value;
-              });
-            },
+          Row(
+            children: [
+              const Text('Alugado'),
+              Switch(
+                value: _alugado,
+                onChanged: (value) {
+                  setState(() {
+                    _alugado = value;
+                  });
+                },
+              ),
+            ],
           ),
           ElevatedButton(
             onPressed: () {
               setState(() {
-                _futureAlbum = LivrosService()
-                    .createLivros(_titulo.text, _autor.text, _alugado);
+                LivrosService ls = LivrosService();
+                _futureAlbum =
+                    ls.createLivros(_titulo.text, _autor.text, _alugado);
+
+                print(_titulo.text);
+                print(_autor.text);
+                print(_alugado);
               });
             },
             child: const Text('Create Data'),
@@ -55,7 +65,7 @@ class _LivrosScreenState extends State<LivrosScreen> {
       ),
     );
   }
-
+/* 
   //Criação do metodo para Exbir os dados na tela
   FutureBuilder<Livros> buildFutureBuilder() {
     return FutureBuilder<Livros>(
@@ -87,5 +97,5 @@ class _LivrosScreenState extends State<LivrosScreen> {
         return const CircularProgressIndicator();
       },
     );
-  }
+    */
 }
