@@ -23,7 +23,7 @@ class LivrosService {
       ),
     );
 
-    if (resposta.statusCode == 200) {
+    if (resposta.statusCode == 201) {
       // code 201 CREATED resposta,
       // then parse the JSON.
       return Livros.fromJson(jsonDecode(resposta.body) as Map<String, dynamic>);
