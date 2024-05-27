@@ -65,7 +65,7 @@ class _LivrosScreenState extends State<LivrosScreen> {
       ),
     );
   }
-/* 
+
   //Criação do metodo para Exbir os dados na tela
   FutureBuilder<Livros> buildFutureBuilder() {
     return FutureBuilder<Livros>(
@@ -97,5 +97,5 @@ class _LivrosScreenState extends State<LivrosScreen> {
         return const CircularProgressIndicator();
       },
     );
-    */
+  }
 }
