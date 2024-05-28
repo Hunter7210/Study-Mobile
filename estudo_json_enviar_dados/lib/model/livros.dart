@@ -5,7 +5,7 @@ class Livros {
   final String titulo;
   final String autor;
   final String condicao;
-  final double valor;
+  final String valor;
   final bool disponivel;
 
   const Livros({
@@ -26,7 +26,7 @@ class Livros {
         'titulo': String titulo,
         'autor': String autor,
         'condicao': String condicao,
-        'valor': double valor,
+        'valor': String valor,
         'disponivel': bool disponivel,
       } =>
         Livros(

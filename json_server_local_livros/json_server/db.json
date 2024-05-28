@@ -79,6 +79,54 @@
       "condicao": "null",
       "valor": 12,
       "disponivel": false
+    },
+    {
+      "id": "b06e",
+      "titulo": "A Lei do Triunfo",
+      "autor": "Napoleon Hill",
+      "condicao": "Usado",
+      "valor": "129.00",
+      "disponivel": true
+    },
+    {
+      "id": "328a",
+      "titulo": "",
+      "autor": "",
+      "condicao": "null",
+      "valor": "",
+      "disponivel": false
+    },
+    {
+      "id": "5254",
+      "titulo": "a",
+      "autor": "a",
+      "condicao": "Usado",
+      "valor": "12",
+      "disponivel": false
+    },
+    {
+      "id": "b78e",
+      "titulo": "R",
+      "autor": "R",
+      "condicao": "Semi-Novo",
+      "valor": "12",
+      "disponivel": true
+    },
+    {
+      "id": "f72f",
+      "titulo": "1",
+      "autor": "1",
+      "condicao": "Semi-Novo",
+      "valor": "",
+      "disponivel": true
+    },
+    {
+      "id": "575a",
+      "titulo": "r",
+      "autor": "r",
+      "condicao": "Semi-Novo",
+      "valor": "",
+      "disponivel": false
     }
   ]
 }

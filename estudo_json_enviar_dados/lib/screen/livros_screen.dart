@@ -29,67 +29,60 @@ class _LivrosScreenState extends State<LivrosScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextField(
-                controller: _titulo,
-                decoration: const InputDecoration(hintText: 'Titulo'),
-              ),
-              TextField(
-                controller: _autor,
-                decoration: const InputDecoration(hintText: 'Autor'),
-              ),
-              TextField(
-                controller: _valor,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                decoration: const InputDecoration(hintText: 'Valor'),
-              ),
-              const Text("Condição"),
-              DropdownButton<String>(
-                hint: const Text('Selecione um opção'),
-                value: _condicao,
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _condicao = newValue;
-                  });
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TextField(
+              controller: _titulo,
+              decoration: const InputDecoration(hintText: 'Titulo'),
+            ),
+            TextField(
+              controller: _autor,
+              decoration: const InputDecoration(hintText: 'Autor'),
+            ),
+            const Text("Condição"),
+            DropdownButton<String>(
+              hint: const Text('Selecione um opção'),
+              value: _condicao,
+              onChanged: (String? newValue) {
+                setState(() {
+                  _condicao = newValue;
+                });
+              },
+              items: _options.map<DropdownMenuItem<String>>(
+                (String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
                 },
-                items: _options.map<DropdownMenuItem<String>>(
-                  (String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
+              ).toList(),
+            ),
+            Row(
+              children: [
+                const Text('Indisponivel'),
+                Switch(
+                  value: _disponivel,
+                  onChanged: (value) {
+                    setState(() {
+                      _disponivel = value;
+                    });
                   },
-                ).toList(),
-              ),
-              Row(
-                children: [
-                  const Text('Indisponivel'),
-                  Switch(
-                    value: _disponivel,
-                    onChanged: (value) {
-                      setState(() {
-                        _disponivel = value;
-                      });
-                    },
-                  ),
-                  const Text('Disponivel'),
-                ],
-              ),
-              ElevatedButton(
-                onPressed: () {
+                ),
+                const Text('Disponivel'),
+              ],
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (mounted) {
                   setState(
                     () {
-                      double valor = double.tryParse(_valor.text) ?? 0.0;
-
                       LivrosService ls = LivrosService();
                       _futureAlbum = ls.createLivros(
                         _titulo.text,
                         _autor.text,
                         _condicao.toString(),
-                        valor.toDouble(),
+                        _valor.text,
                         _disponivel,
                       );
 
@@ -100,22 +93,21 @@ class _LivrosScreenState extends State<LivrosScreen> {
                       print(_disponivel);
                     },
                   );
-                },
-                child: const Text('Create Data'),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ListarLivros()),
-                  );
-                },
-                child: const Text('Listar Livros'),
-              ),
-            ],
-          ),
+                }
+              },
+              child: const Text('Create Data'),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ListarLivros()),
+                );
+              },
+              child: const Text('Listar Livros'),
+            ),
+          ],
         ),
       ),
     );

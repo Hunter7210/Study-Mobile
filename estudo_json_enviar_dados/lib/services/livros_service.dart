@@ -8,7 +8,7 @@ class LivrosService {
 
   //Realizar a solicitação http para criar um novo livro
   Future<Livros> createLivros(String titulo, String autor, String condicao,
-      double valor, bool disponivel) async {
+      String valor, bool disponivel) async {
     final resposta = await http.post(
       Uri.parse(_baseUrl),
       headers: <String, String>{

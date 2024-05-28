@@ -39,7 +39,7 @@ class _ListarLivrosState extends State<ListarLivros> {
                 return ListTile(
                   title: Text(livro.titulo),
                   subtitle: Text(livro.autor),
-                  trailing: Text('R\$ ${livro.valor.toStringAsFixed(1)}'),
+                  trailing: Text('R\$ ${livro.valor}'),
                 );
               },
             );
