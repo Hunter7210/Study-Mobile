@@ -1,10 +1,10 @@
-//NESTA PAGINA, MOSTRAMOS UMA PAGINA ONDE INSERIMOS DADOS AO JSON, E TAMBEM RECUPERAMOS ESTES VALORES EM FORMATO DE TABELA, POREM A LISTAGEM AINDA NÃO FOI FEITA DE FORMA AUTOMATICA
 import 'package:estudo_json_enviar_dados/model/livros.dart';
+import 'package:estudo_json_enviar_dados/screen/listar_livros_screen.dart';
 import 'package:estudo_json_enviar_dados/services/livros_service.dart';
 import 'package:flutter/material.dart';
 
 class LivrosScreen extends StatefulWidget {
-  const LivrosScreen({super.key});
+  const LivrosScreen({Key? key}) : super(key: key);
 
   @override
   State<LivrosScreen> createState() => _LivrosScreenState();
@@ -13,7 +13,12 @@ class LivrosScreen extends StatefulWidget {
 class _LivrosScreenState extends State<LivrosScreen> {
   final TextEditingController _titulo = TextEditingController();
   final TextEditingController _autor = TextEditingController();
-  bool _alugado = false;
+  final TextEditingController _valor = TextEditingController();
+  bool _disponivel = false;
+
+  String? _condicao;
+  final List<String> _options = ['Novo', 'Semi-Novo', 'Usado'];
+
   Future<Livros>? _futureAlbum;
 
   @override
@@ -22,80 +27,97 @@ class _LivrosScreenState extends State<LivrosScreen> {
       appBar: AppBar(
         title: const Text('Create Data Example'),
       ),
-      body: Column(
-        //INSERIR A RESPOSTA
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          TextField(
-            controller: _titulo,
-            decoration: const InputDecoration(hintText: 'Titulo'),
-          ),
-          TextField(
-            controller: _autor,
-            decoration: const InputDecoration(hintText: 'Autor'),
-          ),
-          Row(
-            children: [
-              const Text('Alugado'),
-              Switch(
-                value: _alugado,
-                onChanged: (value) {
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextField(
+                controller: _titulo,
+                decoration: const InputDecoration(hintText: 'Titulo'),
+              ),
+              TextField(
+                controller: _autor,
+                decoration: const InputDecoration(hintText: 'Autor'),
+              ),
+              TextField(
+                controller: _valor,
+                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                decoration: const InputDecoration(hintText: 'Valor'),
+              ),
+              const Text("Condição"),
+              DropdownButton<String>(
+                hint: const Text('Selecione um opção'),
+                value: _condicao,
+                onChanged: (String? newValue) {
                   setState(() {
-                    _alugado = value;
+                    _condicao = newValue;
                   });
                 },
+                items: _options.map<DropdownMenuItem<String>>(
+                  (String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  },
+                ).toList(),
+              ),
+              Row(
+                children: [
+                  const Text('Indisponivel'),
+                  Switch(
+                    value: _disponivel,
+                    onChanged: (value) {
+                      setState(() {
+                        _disponivel = value;
+                      });
+                    },
+                  ),
+                  const Text('Disponivel'),
+                ],
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  setState(
+                    () {
+                      double valor = double.tryParse(_valor.text) ?? 0.0;
+
+                      LivrosService ls = LivrosService();
+                      _futureAlbum = ls.createLivros(
+                        _titulo.text,
+                        _autor.text,
+                        _condicao.toString(),
+                        valor.toDouble(),
+                        _disponivel,
+                      );
+
+                      print(_titulo.text);
+                      print(_autor.text);
+                      print(_condicao);
+                      print(_valor);
+                      print(_disponivel);
+                    },
+                  );
+                },
+                child: const Text('Create Data'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const ListarLivros()),
+                  );
+                },
+                child: const Text('Listar Livros'),
               ),
             ],
           ),
-          ElevatedButton(
-            onPressed: () {
-              setState(() {
-                LivrosService ls = LivrosService();
-                _futureAlbum =
-                    ls.createLivros(_titulo.text, _autor.text, _alugado);
-
-                print(_titulo.text);
-                print(_autor.text);
-                print(_alugado);
-              });
-            },
-            child: const Text('Create Data'),
-          ),
-        ],
+        ),
       ),
-    );
-  }
-
-  //Criação do metodo para Exbir os dados na tela
-  FutureBuilder<Livros> buildFutureBuilder() {
-    return FutureBuilder<Livros>(
-      future: _futureAlbum,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return Center(
-            child: DataTable(
-              columns: const [
-                DataColumn(label: Text('Titulo')),
-                DataColumn(label: Text('Autor')),
-                DataColumn(label: Text('Disponibilidde')),
-              ],
-              rows: [
-                DataRow(
-                  cells: [
-                    DataCell(Text(_titulo.text)),
-                    DataCell(Text(_autor.text)),
-                    DataCell(Text(_alugado.toString())),
-                  ],
-                ),
-              ],
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-
-        return const CircularProgressIndicator();
-      },
     );
   }
 }

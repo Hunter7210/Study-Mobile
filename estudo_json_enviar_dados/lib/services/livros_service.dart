@@ -1,36 +1,55 @@
 import 'dart:convert';
-
 import 'package:estudo_json_enviar_dados/model/livros.dart';
 import 'package:http/http.dart' as http;
 
 class LivrosService {
-  //Realizar a solicitação http e a inserção de dados nela
-  Future<Livros> createLivros(String titulo, String autor, bool alugado) async {
+  // URL do servidor onde os dados dos livros estão sendo armazenados
+  static const String _baseUrl = 'http://localhost:3000/livros';
+
+  //Realizar a solicitação http para criar um novo livro
+  Future<Livros> createLivros(String titulo, String autor, String condicao,
+      double valor, bool disponivel) async {
     final resposta = await http.post(
-      Uri.parse('http://10.109.207.117:3000/usuarios'),
-      //Headers são basicamente os selos de uma carta, nele pode conter requisições de autenticações, alem de informar em qual formato os dados estão sendo enviados, como neste caso onde estamos passando em JSON com UTF-8
+      Uri.parse(_baseUrl),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-
       body: jsonEncode(
         <String, dynamic>{
-          //KEY = String, VALUE = dynamic  //Neste caso
           'titulo': titulo,
           'autor': autor,
-          'alugado': alugado
+          'condicao': condicao,
+          'valor': valor,
+          'disponivel': disponivel,
         },
       ),
     );
 
     if (resposta.statusCode == 201) {
-      // code 201 CREATED resposta,
-      // then parse the JSON.
-      return Livros.fromJson(jsonDecode(resposta.body) as Map<String, dynamic>);
+      // Se a requisição for bem-sucedida, convertemos o JSON retornado para o objeto Livros
+      // Certifique-se de que os nomes dos campos no JSON correspondam aos nomes das propriedades na classe Livros
+      return Livros.fromJson(jsonDecode(resposta.body));
     } else {
-      // If the server did not return a 201 CREATED response,
-      // then throw an exception.
+      // Se o servidor não retornar uma resposta 201 CREATED, lançamos uma exceção
       throw Exception('Failed to create album.');
+    }
+  }
+
+  // Realizar a solicitação http para recuperar todos os livros
+  Future<List<Livros>> getAllLivros() async {
+    final resposta = await http.get(Uri.parse(_baseUrl));
+
+    if (resposta.statusCode == 200) {
+      // Se a requisição for bem-sucedida, convertemos o JSON retornado para uma lista de objetos Livros
+      List<dynamic> jsonData = jsonDecode(resposta.body);
+      List<Livros> livros = [];
+      for (var item in jsonData) {
+        livros.add(Livros.fromJson(item));
+      }
+      return livros;
+    } else {
+      // Se o servidor não retornar uma resposta 200 OK, lançamos uma exceção
+      throw Exception('Failed to load livros');
     }
   }
 }

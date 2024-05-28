@@ -1,15 +1,20 @@
 //Criação do model
+
 class Livros {
   final int id;
   final String titulo;
   final String autor;
-  final bool alugado;
+  final String condicao;
+  final double valor;
+  final bool disponivel;
 
   const Livros({
     required this.id,
     required this.titulo,
     required this.autor,
-    required this.alugado,
+    required this.condicao,
+    required this.valor,
+    required this.disponivel,
   });
 
   factory Livros.fromJson(Map<String, dynamic> json) {
@@ -20,9 +25,17 @@ class Livros {
         'id': int id,
         'titulo': String titulo,
         'autor': String autor,
-        'alugado': bool alugado
+        'condicao': String condicao,
+        'valor': double valor,
+        'disponivel': bool disponivel,
       } =>
-        Livros(id: id, titulo: titulo, autor: autor, alugado: alugado),
+        Livros(
+            id: id,
+            titulo: titulo,
+            autor: autor,
+            condicao: condicao,
+            valor: valor,
+            disponivel: disponivel),
       //Este "_" é o meu default do switch case, no caso me retornando um erro
       _ => throw const FormatException('Falha ao carregar o álbum.'),
     };

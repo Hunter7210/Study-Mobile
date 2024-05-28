@@ -1,0 +1,84 @@
+{
+  "livros": [
+    {
+      "id": 1,
+      "titulo": "O Codigo Da'Vinci",
+      "autor": "Dan Brown",
+      "condicao": "novo",
+      "valor": "39.90",
+      "disponivel": true
+    },
+    {
+      "id": "f04c",
+      "titulo": "Invertidor Inteligente",
+      "autor": "Benjamin Graham",
+      "condicao": "",
+      "valor": 0,
+      "disponivel": true
+    },
+    {
+      "id": "8fd7",
+      "titulo": "Mais Esperto que o Diabo",
+      "autor": "Napoleon Hill",
+      "condicao": "Semi-Novo",
+      "valor": 29.9,
+      "disponivel": false
+    },
+    {
+      "id": "2702",
+      "titulo": "Test",
+      "autor": "ere",
+      "condicao": "Semi-Novo",
+      "valor": 12.43,
+      "disponivel": false
+    },
+    {
+      "id": "c7a4",
+      "titulo": "qwe",
+      "autor": "qwe",
+      "condicao": "Semi-Novo",
+      "valor": 12,
+      "disponivel": false
+    },
+    {
+      "id": "8d4a",
+      "titulo": "O pequeno principe",
+      "autor": "Antoine de Saint-Exupéry",
+      "condicao": "Novo",
+      "valor": 59.9,
+      "disponivel": true
+    },
+    {
+      "id": "956f",
+      "titulo": "",
+      "autor": "",
+      "condicao": "null",
+      "valor": 0,
+      "disponivel": false
+    },
+    {
+      "id": "b841",
+      "titulo": "",
+      "autor": "",
+      "condicao": "null",
+      "valor": 0,
+      "disponivel": false
+    },
+    {
+      "id": "1f4f",
+      "titulo": "",
+      "autor": "",
+      "condicao": "null",
+      "valor": 0,
+      "disponivel": false
+    },
+    {
+      "id": "4ea6",
+      "titulo": "",
+      "autor": "",
+      "condicao": "null",
+      "valor": 12,
+      "disponivel": false
+    }
+  ]
+}
