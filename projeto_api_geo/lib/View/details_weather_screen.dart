@@ -52,7 +52,9 @@ class _WeatherDetailsScreenState extends State<WeatherDetailsScreen> {
                             Text(_controller.weatherList.last.name),
                             IconButton(
                               icon: const Icon(Icons.favorite_border_outlined),
-                              onPressed: () {},
+                              onPressed: () {
+                                const Icon(Icons.favorite_border_sharp);
+                              },
                             ),
                           ],
                         ),

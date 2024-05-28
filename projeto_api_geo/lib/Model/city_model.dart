@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 class City {
   final String cityName;
   final bool favoritesCities;
@@ -8,8 +6,8 @@ class City {
 
   //Métodos
 
-   //toMap
-   //Do banco para o meu objeto
+  //toMap
+  //Do banco para o meu objeto
   Map<String, dynamic> toMap() {
     return {
       'cityname': cityName,
@@ -18,9 +16,8 @@ class City {
   }
 
   //FromMap
-factory City.fromMap(Map<String, dynamic> map){
-  return City(cityName: map['cityname'], favoritesCities: map['favoritesCities'])
-}
-
-
+  factory City.fromMap(Map<String, dynamic> map) {
+    return City(
+        cityName: map['cityname'], favoritesCities: map['favoritesCities']);
+  }
 }

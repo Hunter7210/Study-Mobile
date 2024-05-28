@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_api_geo/Controller/city_database_controller.dart';
 import 'package:projeto_api_geo/Controller/weather_controller.dart';
+import 'package:projeto_api_geo/Model/city_model.dart';
 import 'package:projeto_api_geo/View/details_weather_screen.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -13,6 +15,7 @@ class _SearchScreenState extends State<SearchScreen> {
   final _formkey = GlobalKey<FormState>();
   final TextEditingController _cityContrller = TextEditingController();
   final WeatherController _controller = WeatherController();
+  final CityDbController _cityDbController = CityDbController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +50,28 @@ class _SearchScreenState extends State<SearchScreen> {
                     }
                   },
                   child: const Text("Search"),
-                )
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                FutureBuilder(
+                  future: _cityDbController.listcity(),
+                  builder: (context, snapshot) {
+                    if (_cityDbController.cities().isNotEmpty) {
+                      return ListView.builder(
+                        itemCount: _cityDbController.cities().length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(
+                                _cityDbController.cities()[index].cityName),
+                            onTap: () {},
+                          );
+                        },
+                      );
+                    }
+                    return const Center(child: Text("Empty Location"));
+                  },
+                ),
               ],
             ),
           ),
@@ -59,6 +83,9 @@ class _SearchScreenState extends State<SearchScreen> {
 //C
   Future<void> _findCity(String city) async {
     if (await _controller.findCity(city)) {
+      City cityadd = City(cityName: city, favoritesCities: false);
+      _cityDbController.addCity(cityadd);
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("City found"),
@@ -71,6 +98,7 @@ class _SearchScreenState extends State<SearchScreen> {
           builder: (context) => WeatherDetailsScreen(cityName: city),
         ),
       );
+      setState(() {});
     } else {
       // snackbar
       ScaffoldMessenger.of(context).showSnackBar(
