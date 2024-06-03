@@ -28,9 +28,15 @@ class ProdutosController {
 
   //postProdutos toJson http
   Future<String> postProdutosToJson(Produto produto) async {
-    final response = await http.post(Uri.parse('http://localhost:3000/produto'),
-        body: json.encode(produto.toJson()));
+    final response = await http.post(
+      Uri.parse('http://10.109.207.146:3000/produto'),
+      body: json.encode(produto.toJson()),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
     if (response.statusCode == 201) {
+      //201  = CREATE
       return response.body;
     } else {
       throw Exception('Failed to load Produtos');

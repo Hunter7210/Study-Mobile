@@ -1,6 +1,6 @@
 class Produto {
   //Atributos
-  final int id;
+  final String id;
   final String nome;
   final double preco;
 
@@ -18,9 +18,11 @@ class Produto {
 
   factory Produto.fromJson(Map<String, dynamic> json) {
     return Produto(
-      id: json['id'],
-      nome: json['nome'],
-      preco: json['preco'],
+      id: json['id'].toString(),
+      nome: json['nome'].toString(),
+      preco: json['preco'] is double
+          ? json['preco']
+          : double.parse(json['preco']).toDouble(),
     );
   } //From JSON
 }
