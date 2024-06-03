@@ -1,0 +1,7 @@
+Comandos:
+Garanta que a versã odo node e npm estao atualizados
+
+    npm init -y
+
+    em seguida:
+        npm install -g json-server
