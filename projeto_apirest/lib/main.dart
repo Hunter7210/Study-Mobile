@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:projeto_apirest/screens/home_screen.dart';
+import 'package:projeto_apirest/screens/lista_produtos_screen.dart';
 
 void main(List<String> args) {
   runApp(const MyApp());
@@ -14,7 +16,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: HomePage(),
+      home: const HomeScreen(),
+      debugShowCheckedModeBanner: false,
+      routes: {
+        '/home': (context) => const HomeScreen(),
+        '/listar': (context) => const ListaProdutosScreen(),
+      },
     );
   }
 }

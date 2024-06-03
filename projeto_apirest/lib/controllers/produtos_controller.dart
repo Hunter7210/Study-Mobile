@@ -14,8 +14,8 @@ class ProdutosController {
 //O correto é criar um service e no controller chamar os metodos utilizando o try cat
   Future<List<Produto>> getProdutosFromJson() async {
     //Conentando ao servidor
-    final response =
-        await http.get(Uri.parse('http://localhost:3000/produto')); //Meu IP
+    final response = await http
+        .get(Uri.parse('http://10.109.207.146:3000/produto')); //Meu IP
     //Busca as informações do json
     if (response.statusCode == 200) {
       List<dynamic> result = await json.decode(response.body);
