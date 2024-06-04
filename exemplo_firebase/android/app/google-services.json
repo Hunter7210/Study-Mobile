@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "769235367974",
+    "project_id": "teste-firebase-tarde-heitor",
+    "storage_bucket": "teste-firebase-tarde-heitor.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:769235367974:android:c6f00b571def992ff20ee7",
+        "android_client_info": {
+          "package_name": "br.com.heitor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBhjjC3NhAMamUIFvXhi8-ksacu2merjEY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
