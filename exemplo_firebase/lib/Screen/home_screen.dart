@@ -36,6 +36,15 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: const Text('Home'),
             ),
+            const SizedBox(
+              height: 10.0,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/register');
+              },
+              child: const Text('Registrar'),
+            ),
           ],
         ),
       ),
