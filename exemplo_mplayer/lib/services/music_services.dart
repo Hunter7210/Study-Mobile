@@ -6,14 +6,14 @@ import 'package:http/http.dart' as http;
 class MusicServices {
   //Serve para conectar o json
 
-  final Uri url = "http://URL_JSON.com";
+  final String url = "http://10.109.195.200/music/";
 
   List<MusicModel> _listMusic = [];
   List<MusicModel> get listMusic => _listMusic;
 
   //featch lista  de musicas
   Future<List<MusicModel>> featchListMusic() async {
-    final response = await http.get(url);
+    final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       _listMusic = json
           .decode(response.body)
