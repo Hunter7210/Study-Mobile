@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:exemplo_firebase/Screen/home_screen.dart';
+import 'package:exemplo_firebase/Screen/list_data_screen.dart';
 import 'package:exemplo_firebase/Screen/login_screen.dart';
 import 'package:exemplo_firebase/Screen/register_screen.dart';
 import 'package:exemplo_firebase/firebase_options.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,7 +13,7 @@ void main() async {
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  const MainApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,8 @@ class MainApp extends StatelessWidget {
       routes: {
         '/home': (context) => const HomeScreen(),
         '/login': (context) => const LoginScreen(),
-        '/registro': (context) => const RegistroScreen()
+        '/registro': (context) => const RegistroScreen(),
+        '/list': (context) => const ListDataScreen(userId: 'user_id_here'),
       },
     );
   }

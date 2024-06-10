@@ -31,6 +31,12 @@ class HomeScreen extends StatelessWidget {
               },
               child: const Text('Registro'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pushNamed(context, '/listar');
+              },
+              child: const Text('Listar'),
+            ),
           ],
         ),
       ),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class ListDataScreen extends StatefulWidget {
   final String userId;
 
-  ListDataScreen({Key? key, required this.userId}) : super(key: key);
+  const ListDataScreen({Key? key, required this.userId}) : super(key: key);
 
   @override
   _ListDataScreenState createState() => _ListDataScreenState();
