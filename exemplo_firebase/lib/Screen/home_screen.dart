@@ -1,49 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.amber,
+        title: const Text('Home'),
       ),
-      body: Center(
+      body:
+          //dois botões(págian de login e registro)
+          Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text("Titulo"),
-            const SizedBox(
-              height: 10.0,
-            ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/Login');
+                Navigator.pushNamed(context, '/login');
               },
               child: const Text('Login'),
             ),
             const SizedBox(
-              height: 10.0,
+              height: 12,
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/Home');
+                Navigator.pushNamed(context, '/registro');
               },
-              child: const Text('Home'),
-            ),
-            const SizedBox(
-              height: 10.0,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, '/register');
-              },
-              child: const Text('Registrar'),
+              child: const Text('Registro'),
             ),
           ],
         ),
