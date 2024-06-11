@@ -20,5 +20,13 @@
             "nome": "Produto 4",
             "preco": 20.00
         }
+    ],
+    "music": [
+        {
+            "title": "What I've Done",
+            "artist": "Linkin Park",
+            "url": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            "color": "blue"
+        }
     ]
 }
