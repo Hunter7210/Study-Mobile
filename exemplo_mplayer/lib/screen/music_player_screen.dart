@@ -47,9 +47,13 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Color backgroundColor =
+        _parseColor(widget.music.color); // Função para converter a cor
+    print(backgroundColor);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.music.title), // Exibe o título da música na app bar
+        backgroundColor: backgroundColor,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8),
@@ -87,7 +91,7 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
                   IconButton(
                     onPressed: () {
                       _audio.seek(
-                        const Duration(seconds: 10),
+                        const Duration(seconds: 100),
                       ); // Avança 10 segundos
                     },
                     icon: const Icon(Icons.keyboard_double_arrow_right),
@@ -99,6 +103,14 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
         ),
       ),
     );
+  }
+
+  Color _parseColor(String hexColor) {
+    if (hexColor.length != 7 || hexColor[0] != '#') {
+      return Colors.black; // Cor padrão se inválida
+    }
+
+    return Color(int.parse(hexColor.substring(1, 7), radix: 16));
   }
 
   @override

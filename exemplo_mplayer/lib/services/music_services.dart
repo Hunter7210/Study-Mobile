@@ -6,7 +6,7 @@ import 'package:http/http.dart' as http;
 class MusicServices {
   //Serve para conectar o json
 
-  final String url = "http://10.109.204.51:3000/music";
+  final String url = "http://10.109.207.157:3000/music";
 
   List<MusicModel> _listMusic = [];
   List<MusicModel> get listMusic => _listMusic;
