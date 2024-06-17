@@ -40,4 +40,15 @@ class Livros {
       _ => throw const FormatException('Falha ao carregar o álbum.'),
     };
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'titulo': titulo,
+      'autor': autor,
+      'condicao': condicao,
+      'valor': valor,
+      'disponivel': disponivel,
+    };
+  }
 }

@@ -6,7 +6,7 @@ class LivrosService {
   // URL do servidor onde os dados dos livros estão sendo armazenados
   static const String _baseUrl = 'http://localhost:3000/livros';
 
-  //Realizar a solicitação http para criar um novo livro
+  /// Realizar a solicitação HTTP para criar um novo livro
   Future<Livros> createLivros(String titulo, String autor, String condicao,
       String valor, bool disponivel) async {
     final resposta = await http.post(
@@ -26,21 +26,17 @@ class LivrosService {
     );
 
     if (resposta.statusCode == 201) {
-      // Se a requisição for bem-sucedida, convertemos o JSON retornado para o objeto Livros
-      // Certifique-se de que os nomes dos campos no JSON correspondam aos nomes das propriedades na classe Livros
       return Livros.fromJson(jsonDecode(resposta.body));
     } else {
-      // Se o servidor não retornar uma resposta 201 CREATED, lançamos uma exceção
-      throw Exception('Failed to create album.');
+      throw Exception('Failed to create livro.');
     }
   }
 
-  // Realizar a solicitação http para recuperar todos os livros
+  // Realizar a solicitação HTTP para recuperar todos os livros
   Future<List<Livros>> getAllLivros() async {
     final resposta = await http.get(Uri.parse(_baseUrl));
 
     if (resposta.statusCode == 200) {
-      // Se a requisição for bem-sucedida, convertemos o JSON retornado para uma lista de objetos Livros
       List<dynamic> jsonData = jsonDecode(resposta.body);
       List<Livros> livros = [];
       for (var item in jsonData) {
@@ -48,8 +44,23 @@ class LivrosService {
       }
       return livros;
     } else {
-      // Se o servidor não retornar uma resposta 200 OK, lançamos uma exceção
       throw Exception('Failed to load livros');
+    }
+  }
+
+  // Realizar a solicitação HTTP para atualizar um livro existente
+  Future<Livros> updateLivro(Livros livro) async {
+    final url = Uri.parse('$_baseUrl/${livro.id}');
+    final resposta = await http.put(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(livro.toMap()),
+    );
+
+    if (resposta.statusCode == 200) {
+      return Livros.fromJson(jsonDecode(resposta.body));
+    } else {
+      throw Exception('Failed to update livro');
     }
   }
 }
