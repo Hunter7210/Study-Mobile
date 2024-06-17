@@ -1,22 +1,14 @@
-import 'package:estudo_json_enviar_dados/model/livros.dart';
-import 'package:estudo_json_enviar_dados/services/livros_service.dart';
 import 'package:flutter/material.dart';
+import 'package:estudo_json_enviar_dados/services/livros_service.dart';
+import 'package:estudo_json_enviar_dados/model/livros.dart';
 
-class ListarLivros extends StatefulWidget {
-  const ListarLivros({super.key});
-
+class LivrosListScreen extends StatefulWidget {
   @override
-  State<ListarLivros> createState() => _ListarLivrosState();
+  _LivrosListScreenState createState() => _LivrosListScreenState();
 }
 
-class _ListarLivrosState extends State<ListarLivros> {
-  late Future<List<Livros>> _livrosFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _livrosFuture = LivrosService().getAllLivros();
-  }
+class _LivrosListScreenState extends State<LivrosListScreen> {
+  final LivrosService _livrosService = LivrosService();
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +17,16 @@ class _ListarLivrosState extends State<ListarLivros> {
         title: const Text('Lista de Livros'),
       ),
       body: FutureBuilder<List<Livros>>(
-        future: _livrosFuture,
+        future: _livrosService.getAllLivros(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text('Erro: ${snapshot.error}'));
-          } else if (snapshot.hasData) {
+            print(snapshot.error);
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('Nenhum livro encontrado.'));
+          } else {
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (context, index) {
@@ -39,12 +34,16 @@ class _ListarLivrosState extends State<ListarLivros> {
                 return ListTile(
                   title: Text(livro.titulo),
                   subtitle: Text(livro.autor),
-                  trailing: Text('R\$ ${livro.valor}'),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: () async {
+                      await _livrosService.deleteLivro(livro.id);
+                      setState(() {});
+                    },
+                  ),
                 );
               },
             );
-          } else {
-            return const Center(child: Text('Nenhum livro encontrado'));
           }
         },
       ),

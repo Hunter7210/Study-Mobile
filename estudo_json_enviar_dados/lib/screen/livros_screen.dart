@@ -40,6 +40,10 @@ class _LivrosScreenState extends State<LivrosScreen> {
               controller: _autor,
               decoration: const InputDecoration(hintText: 'Autor'),
             ),
+            TextField(
+              controller: _valor,
+              decoration: const InputDecoration(hintText: 'Valor'),
+            ),
             const Text("Condição"),
             DropdownButton<String>(
               hint: const Text('Selecione um opção'),
@@ -102,7 +106,7 @@ class _LivrosScreenState extends State<LivrosScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ListarLivros()),
+                  MaterialPageRoute(builder: (context) => LivrosListScreen()),
                 );
               },
               child: const Text('Listar Livros'),

@@ -21,7 +21,7 @@ class _ListDataScreenState extends State<ListDataScreen> {
   }
 
   Future<void> _carregarDados() async {
-    List<Todolist> lista = await TodolistController().listar(widget.userId);
+    List<Todolist> lista = await TodolistController().fetchList(widget.userId);
     setState(() {
       _listaTarefas = lista;
     });

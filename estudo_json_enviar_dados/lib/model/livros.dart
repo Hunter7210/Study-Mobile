@@ -1,7 +1,7 @@
 //Criação do model
 
 class Livros {
-  final int id;
+  final String id;
   final String titulo;
   final String autor;
   final String condicao;
@@ -17,30 +17,6 @@ class Livros {
     required this.disponivel,
   });
 
-  factory Livros.fromJson(Map<String, dynamic> json) {
-    // Este switch é um switch case
-    return switch (json) {
-      {
-        //  Ele procura um mapa que tenha as chaves 'id','titulo'etc, e espera que os valores associados sejam do tipo int,String etc
-        'id': int id,
-        'titulo': String titulo,
-        'autor': String autor,
-        'condicao': String condicao,
-        'valor': String valor,
-        'disponivel': bool disponivel,
-      } =>
-        Livros(
-            id: id,
-            titulo: titulo,
-            autor: autor,
-            condicao: condicao,
-            valor: valor,
-            disponivel: disponivel),
-      //Este "_" é o meu default do switch case, no caso me retornando um erro
-      _ => throw const FormatException('Falha ao carregar o álbum.'),
-    };
-  }
-
   Map<String, dynamic> toMap() {
     return {
       'id': id,
@@ -50,5 +26,17 @@ class Livros {
       'valor': valor,
       'disponivel': disponivel,
     };
+  }
+
+  factory Livros.fromJson(Map<String, dynamic> json) {
+    // Este switch é um switch case
+    return Livros(
+      id: json['id'] ?? '123',
+      titulo: json['titulo'] ?? 'titulo',
+      autor: json['autor'] ?? 'autor',
+      condicao: json['condicao'] ?? 'condicao',
+      valor: json['valor'] ?? 'valor',
+      disponivel: json['disponivel'] ?? false,
+    );
   }
 }

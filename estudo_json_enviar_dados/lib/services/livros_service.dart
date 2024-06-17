@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 
 class LivrosService {
   // URL do servidor onde os dados dos livros estão sendo armazenados
-  static const String _baseUrl = 'http://localhost:3000/livros';
+  static const String _baseUrl = 'http://10.109.195.177:3000/livros';
 
   /// Realizar a solicitação HTTP para criar um novo livro
   Future<Livros> createLivros(String titulo, String autor, String condicao,
@@ -38,11 +38,7 @@ class LivrosService {
 
     if (resposta.statusCode == 200) {
       List<dynamic> jsonData = jsonDecode(resposta.body);
-      List<Livros> livros = [];
-      for (var item in jsonData) {
-        livros.add(Livros.fromJson(item));
-      }
-      return livros;
+      return jsonData.map((item) => Livros.fromJson(item)).toList();
     } else {
       throw Exception('Failed to load livros');
     }
@@ -53,7 +49,7 @@ class LivrosService {
     final url = Uri.parse('$_baseUrl/${livro.id}');
     final resposta = await http.put(
       url,
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode(livro.toMap()),
     );
 
@@ -61,6 +57,18 @@ class LivrosService {
       return Livros.fromJson(jsonDecode(resposta.body));
     } else {
       throw Exception('Failed to update livro');
+    }
+  }
+
+  Future<void> deleteLivro(String id) async {
+    final url = Uri.parse('$_baseUrl/$id');
+    final resposta = await http.delete(
+      url,
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
+    );
+
+    if (resposta.statusCode != 200) {
+      throw Exception('Failed to delete livro');
     }
   }
 }
