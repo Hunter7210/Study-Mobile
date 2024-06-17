@@ -4,30 +4,34 @@ import 'package:exemplo_firebase/models/todolist.dart';
 class TodolistController {
   List<Todolist> _list = [];
   List<Todolist> get list => _list;
-  //classe firebase firestore
+
+  // Instância do Firestore
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  //métodos
-  //add
+  // Método para adicionar um item na lista do Firestore
   Future<void> add(Todolist todo) async {
     await _firestore.collection('todolist').add(todo.toMap());
   }
 
-  //delete
+  // Método para deletar um item da lista do Firestore baseado no ID
   Future<void> delete(String id) async {
     await _firestore.collection('todolist').doc(id).delete();
   }
 
-  //listar
+  // Método para listar todos os itens da lista do Firestore baseado no userID
   Future<List<Todolist>> listar(String userId) async {
+    // Consulta ao Firestore para buscar os documentos da coleção 'todolist'
+    // onde o campo 'userId' seja igual a userId, ordenados pelo campo 'timestamp' em ordem descendente
     final result = await _firestore
         .collection('todolist')
         .where('userId', isEqualTo: userId)
         .orderBy('timestamp', descending: true)
         .get();
 
+    // Mapeando os documentos retornados para objetos Todolist usando o método fromJson da classe Todolist
     _list = result.docs.map((doc) => Todolist.fromJson(doc.data())).toList();
 
+    // Retornando a lista de Todolists
     return _list;
   }
 }
