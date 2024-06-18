@@ -3,42 +3,50 @@ import 'package:projeto_api_geo/Model/city_model.dart';
 import 'package:sqflite/sqflite.dart';
 
 class CityDbService {
-  //Service somente para conectar no banco
-  final String DATABASE_NAME = 'city_db.db'; // Nome do banco de dados
-  final String TABLE_NAME = 'city'; // Nome da tabela
-  final String CREATE_TABLE_SCRIPT = // Script SQL para criar a tabela
-      """CREATE TABLE city(
-          cityname TEXT PRIMARY KEY, 
-          favoritesCities BOOLEAN
-          )""";
+  final String DATABASE_NAME = 'city_db.db';
+  final String TABLE_NAME = 'city';
 
-  //Método openDatabase
+  // Script SQL para criar a tabela
+  final String CREATE_TABLE_SCRIPT = '''
+  CREATE TABLE city (
+    cityname TEXT PRIMARY KEY, 
+    favoritesCities INTEGER
+  )
+''';
+
+  // Método openDatabase
   Future<Database> _opendatabase() async {
     return await openDatabase(
       join(await getDatabasesPath(), DATABASE_NAME),
-      onCreate: (db, version) => CREATE_TABLE_SCRIPT,
+      onCreate: (db, version) async {
+        await db.execute(CREATE_TABLE_SCRIPT);
+      },
       version: 1,
     );
   }
 
-  //crud
-  //insert
-  Future<void> insertCity(City city) async {
+  // Insert
+  Future<void> insertCity(String cityName) async {
     try {
       Database db = await _opendatabase();
-      await db.insert(TABLE_NAME, city.toMap());
-      db.close();
+      Map<String, dynamic> cityMap = {
+        'cityname': cityName,
+        'favoritesCities': 0, // Inicializa com 0 (falso)
+      };
+      await db.insert(TABLE_NAME, cityMap,
+          conflictAlgorithm: ConflictAlgorithm.replace);
+      await db.close();
     } catch (e) {
       print(e);
     }
   }
 
-  //list - read
+  // List - Read
   Future<List<Map<String, dynamic>>> listCity() async {
     try {
       Database db = await _opendatabase();
       List<Map<String, dynamic>> maps = await db.query(TABLE_NAME);
-      db.close();
+      await db.close();
       return maps;
     } catch (e) {
       print(e);
@@ -57,7 +65,7 @@ class CityDbService {
     }
   }
 
-  //update favoritesCities
+//update favoritesCities
   Future<void> updateCity(City city) async {
     try {
       Database db = await _opendatabase();

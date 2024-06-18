@@ -47,6 +47,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     if (_formkey.currentState!.validate()) {
                       _findCity(
                           _cityContrller.text); //Executa o metodo cityFind
+                      print(_cityContrller.text);
                     }
                   },
                   child: const Text("Search"),
@@ -82,10 +83,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
 //C
   Future<void> _findCity(String city) async {
-    if (await _controller.findCity(city)) {
-      City cityadd = City(cityName: city, favoritesCities: false);
-      _cityDbController.addCity(cityadd);
+    bool cityFound = await _controller
+        .findCity(city); // Chamando o método findCity com o nome da cidade
 
+    if (cityFound) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("City found"),
@@ -95,18 +96,19 @@ class _SearchScreenState extends State<SearchScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => WeatherDetailsScreen(cityName: city),
+          builder: (context) => WeatherDetailsScreen(city: city),
         ),
       );
       setState(() {});
     } else {
-      // snackbar
+      // Snackbar informando que a cidade não foi encontrada
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("City not found"),
           duration: Duration(seconds: 2),
         ),
       );
+      // Limpar o campo de entrada da cidade
       _cityContrller.clear();
     }
   }

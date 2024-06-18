@@ -1,5 +1,3 @@
-import 'dart:collection';
-
 import 'package:projeto_api_geo/Services/city_database_service.dart';
 
 import '../Model/city_model.dart';
@@ -23,7 +21,7 @@ class CityDbController {
   }
 
   //add city
-  Future<void> addCity(City city) async {
+  Future<void> addCity(String city) async {
     await _service.insertCity(city);
   }
 
